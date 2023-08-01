@@ -1,0 +1,17 @@
+;#packopt name "OpenHspInVSCode"
+#packopt name "OHIVSCode"  ; 古い環境で実行ファイル化->packするとき文字数制限有り
+#packopt icon "ONICODE.ico"
+#packopt hide 1
+
+if dir_cmdline == "" : end
+_dir_file = dir_cmdline
+_dir_file = strtrim(_dir_file, 0, '\"')
+exist "OpenHspInVSCode.ini"
+if strsize == -1 : end
+notesel text
+noteload "OpenHspInVSCode.ini"
+noteget path, 0
+_dir_folder = getpath(_dir_file,32)
+_dir_folder = strtrim(_dir_folder, 2, '\\')
+exec "\""+path+"\" \""+_dir_folder+"\" \""+_dir_file+"\"", 2
+end

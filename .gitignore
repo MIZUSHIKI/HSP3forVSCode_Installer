@@ -1,0 +1,7 @@
+HSP3forVSCode_Inst.exe
+hsptmp.exe
+*.ax
+obj
+packfile
+hsptmp
+hsptmp.i

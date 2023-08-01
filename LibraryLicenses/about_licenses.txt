@@ -1,0 +1,18 @@
+使用ライブラリ - ライセンス情報
+
+bregonig.dll Ver.4.20 Copyright (C) 2006-2019 K.Takata
+・ライセンス： Artistic License (LICENSE_PerlArtistic.txt 参照)
+・ソースコード： https://github.com/k-takata/bregonig
+
+bregonig.dll内使用ライブラリ (Oniguruma, Onigmo, Ruby, dbgtrace.h, mem_vc6.h)
+・ライセンス： BSD License (LICENSE_BSD_bregonig.txt 参照)
+
+packdll Ver.1.01 - inovia
+・ライセンス： BSD License - OpenHSP (LICENSE_BSD_OpenHsp.txt 参照)
+・配布先： https://hsp.moe/#packdll
+
+hspext.dll ver3.5 - copyright 1999-2016 (c) onion software
+・ライセンス： free (LICENSE_HSP3DLLs.txt 参照)
+
+hspinet.dll ver3.6 - copyright 2005-2020 (c) onion software
+・ライセンス： BSD License - OpenHSP (LICENSE_HSP3DLLs.txt 参照)

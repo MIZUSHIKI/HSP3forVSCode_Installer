@@ -1,0 +1,2079 @@
+/*******************************************************************************
+使用ライブラリ - ライセンス情報
+
+bregonig.dll Ver.4.20 Copyright (C) 2006-2019 K.Takata
+・ライセンス： Artistic License (下記 LICENSE_PerlArtistic変数 参照)
+・ソースコード： https://github.com/k-takata/bregonig
+
+bregonig.dll内使用ライブラリ (Oniguruma, Onigmo, Ruby, dbgtrace.h, mem_vc6.h)
+・ライセンス： BSD License (下記 LICENSE_BSD_bregonig変数 参照)
+
+packdll Ver.1.01 - inovia
+・ライセンス： BSD License - OpenHSP (下記 LICENSE_BSD_OpenHsp変数 参照)
+・配布先： https://hsp.moe/#packdll
+
+*******************************************************************************/
+LICENSE_PerlArtistic = {"
+
+			 The "Perl Artistic License"
+
+				Preamble
+
+The intent of this document is to state the conditions under which the Perl
+Package may be copied, such that the Copyright Holder maintains some
+semblance of artistic control over its development, while giving Perl users 
+the right to use and distribute Perl in a more-or-less customary fashion, 
+plus the right to make reasonable modifications.
+
+Definitions:
+
+	"Package" refers to the collection of Perl-kit files distributed by the
+	Copyright Holder, and derivatives of that collection of files
+	created through textual modification.
+
+	"Standard Version" refers to such a Package if it has not been
+	modified, or has been modified as specified below.
+
+	"Copyright Holder" is whoever is named in the copyright or
+	copyrights for the Perl package.
+
+	"You" is you, if you're thinking about copying or distributing
+	this Package.
+
+	"Reasonable copying fee" is whatever you can justify on the
+	basis of media cost, duplication charges, time of people involved,
+	and so on.  (You will not be required to justify it to the
+	Copyright Holder, but only to the computing community at large
+	as a market that must bear the fee.)
+
+	"Freely Available" means that no fee is charged for the item
+	itself, though there may be fees involved in handling the item.
+	It also means that recipients of the item may redistribute it
+	under the same conditions they received it.
+
+1. You may make and give away verbatim copies of the source form of the
+Standard Version of this Perl Package without restriction, provided that you
+duplicate all of the original copyright notices and associated disclaimers.
+
+2. You may apply bug fixes, portability fixes and other modifications
+derived from the Public Domain or from the Copyright Holder.  A Package
+modified in such a way shall still be considered the Standard Version.
+
+3. You may otherwise modify your copy of this Perl Package in any way, 
+provided that you insert a prominent notice in each changed file stating how 
+and when you changed that file, and provided that you do at least ONE of the
+following:
+
+    a) place your modifications in the Public Domain or otherwise make them
+    Freely Available, such as by posting said modifications to Usenet or
+    an equivalent medium, or placing the modifications on a major archive
+    site such as uunet.uu.net, or by allowing the Copyright Holder to include
+    your modifications in the Standard Version of the Perl Package.
+
+    b) use the modified Perl Package only within your corporation or 
+	organization.
+
+    c) rename any non-standard executables so the names do not conflict
+    with standard executables, which must also be provided, and provide
+    a separate manual page for each non-standard executable that clearly
+    documents how it differs from the Standard Version.
+
+    d) make other distribution arrangements with the Copyright Holder.
+
+4. You may distribute the programs of this Perl Package in object code or
+executable form, provided that you do at least ONE of the following:
+
+    a) distribute a Standard Version of the executables and library files,
+    together with instructions (in the manual page or equivalent) on where
+    to get the Standard Version.
+
+    b) accompany the distribution with the machine-readable source of
+    the Perl Package with your modifications.
+
+    c) accompany any non-standard executables with their corresponding
+    Standard Version executables, giving the non-standard executables
+    non-standard names, and clearly documenting the differences in manual
+    pages (or equivalent), together with instructions on where to get
+    the Standard Version.
+
+    d) make other distribution arrangements with the Copyright Holder.
+
+5. You may charge a reasonable copying fee for any distribution of this
+Perl Package.  You may charge any fee you choose for support of this Perl 
+Package. You may not charge a fee for this Perl Package itself.  However,
+you may distribute this Perl Package in aggregate with other (possibly
+commercial) programs as part of a larger (possibly commercial) software
+distribution provided that you do not advertise this Perl Package as a
+product of your own.
+
+6. The scripts and library files supplied as input to or produced as
+output from the programs of this Perl Package do not automatically fall
+under the copyright of this Perl Package, but belong to whomever generated
+them, and may be sold commercially, and may be aggregated with this Perl
+Package.
+
+7. C subroutines supplied by you and linked into this Perl Package in order
+to emulate subroutines and variables of the language defined by this Perl
+Package shall not be considered part of this Perl Package, but are the
+equivalent of input as in Paragraph 6, provided these subroutines do
+not change the language in any way that would cause it to fail the
+regression tests for the language.
+
+8. The name of the Copyright Holder may not be used to endorse or promote
+products derived from this software without specific prior written permission.
+
+9. This PERL PACKAGE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR
+IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
+WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
+				The End
+"}
+
+LICENSE_BSD_bregonig = {"
+
+Onigmo (Oniguruma-mod) LICENSE
+------------------------------
+
+Copyright (c) 2002-2018  K.Kosako  <kkosako0@gmail.com>
+Copyright (c) 2011-2019  K.Takata  <kentkt AT csc DOT jp>
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGE.
+
+
+
+Oniguruma LICENSE
+-----------------
+
+Copyright (c) 2002-2018  K.Kosako  <kkosako0@gmail.com>
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGE.
+
+
+
+Ruby BSDL
+---------
+Copyright (C) 1993-2013 Yukihiro Matsumoto. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+1. Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGE.
+
+
+
+dbgtrace.h and mem_vc6.h LICENSE
+--------------------------------
+
+/*
+ * Copyright (C) 2006  K.Takata
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *  2. Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */ 
+"}
+
+LICENSE_BSD_OpenHsp = {"
+
+Copyright (C) 1997-2017, Onion Software/onitama.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. 
+Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. 
+Neither the name of the Onion Software nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission. 
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+"}
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//  HSP3 for VSCode インストーラー  Ver.0.9 - Copyright(C) 2023 MIZUSHIKI
+//
+//   下記項目のダウンロード＆インストール、各種設定を行います。
+//
+//     HSP3.6
+//       - hspc (thanks ほのぼのぽー さん)
+//       - 関連付け[OpenHspInVSCode.exe]
+//     VSCode
+//       - 文字化け、インデント、制限モード設定
+//       - 日本語化拡張
+//       - language-hsp3拡張 (thanks ほのぼのぽー さん)
+//       - HSP3 アナライザー・ミニ (LSP)拡張 (thanks 令掛ベイン さん)
+//       - ショートカットキー登録
+//
+//   開発環境 : HSP3.6 + packdll
+//
+
+#packopt name "HSP3forVSCode_Inst"
+#packopt hide 1
+#packopt icon "icon_h3fvsc.ico"
+#packopt version "version_h3fvsc.txt"
+#packopt manifest "manifest_h3fvsc.txt"  ; manifestが上手く適用されなかったらResourceHacker等で直接書き換えてください(hsp3ld.hrt)
+
+#define APP_NAME "HSP3 for VSCode インストーラー"
+#define APP_VERSION_STR "0.9"
+#define APP_VERSION_DOUBLE (0.9)
+#define APP_COPYRIGHT "Copyright(C) 2023 MIZUSHIKI"
+#define APP_DEVELOPER "MIZUSHIKI"
+#define APP_CONTACT_MAIL "suwa.mizushiki@gmail.com"
+
+#pack "icon32.png"
+#pack "hsptmp"  ; 自身のスクリプトを表示する必要がありそうなので埋め込む
+#pack "OHIVSCode.exe"  ; 古い環境で実行ファイル化するときのために文字数を削っておく(OpenHspInVSCode.exe)
+// ↑.hspファイル関連付け用実行ファイル。VSCodeでHSPファイルとそのフォルダを同時に指定して開くためのもの。(末尾にスクリプト記載)
+
+
+//==============================================================================
+// packdll - 可能であれば実行ファイルにdllを埋め込んでみる
+//------------------------------------------------------------------------------
+//  packdll (PackFileにDLLを入れたまま実行するやつ)
+//   - https://hsp.moe/#packdll
+//   - thanks inovia さん
+//   - 配布先(Ver.1.01)同梱の開発環境 : HSP3.31
+//   - HSP3.6に対応する為にはVisualStudioとOpenHSPからソースコードが必要。
+//
+#addition "packdll.as"  ; ファイルが無ければdll埋め込みの項目はスキップされる
+#ifdef LoadPackDLL
+
+#runtime "hsp3ld"
+// パックファイルからDLLを読み込む
+LoadPackDLL "hspext.dll"
+if stat : dialog "hspext.dll の読み込みに失敗しました" : end
+LoadPackDLL "hspinet.dll"
+if stat : dialog "hspinet.dll の読み込みに失敗しました" : end
+LoadPackDLL "bregonig.dll"
+if stat : dialog "bregonig.dll の読み込みに失敗しました" : end
+// LoadPackDLLは先頭に配置 (パックDLLのインクルードより先)
+#pack "hspext.dll"
+#pack "hspinet.dll"
+#pack "bregonig.dll"
+
+#endif
+//------------------------------------------------------------------------------
+// HSP3.6対応 packdll(hsp3ld.hrt)の作り方 [2023/8/1時点]
+// ・Visual Studio Community 2019 使用。(Visual Studio Installer＞「C++によるデスクトップ開発」をインストールしておく。)
+// ・OpenHSP＞リポジトリブラウザ/tags/3.6/hsp3でソースコード「Zip 書庫」を入手して展開。 - http://dev.onionsoft.net/trac/openhsp
+// 【手順】
+//  1. Visual Studio Installer＞個別のコンポーネント から「VS2017(v141)ツールのC++WindowsXPサポート[非推奨]」をインストール。
+//     (hsp3\win32gui\hsp3.slnをVS2019で開き プロジェクト＞プロパティ＞全般＞プラットフォームツールセット の項目に書いてあるものと同じもの)
+//  2. tags\3.6\hsp3フォルダにpackdll_101\src\hsp3ld\load_dllフォルダをコピー。
+//  3. hsp3\win32gui\hsp3.slnをVS2019で開き、右側のソリューションエクスプローラにコピーしたload_dllフォルダをドラッグ＆ドロップして追加。
+//  4. メニュー＞ビルド＞構成マネージャを開く。
+//  5. アクティブソリューション構成のドロップリストから＜新規作成...＞を選択し、名前「hsp3ld」設定のコピー元「hsprt」でOKボタン。
+//  6. ソリューションエクスプローラで「hsp3」を右クリック＞プロパティを開く。
+//  7. 左上の構成ドロップリストから「hsp3ld」を選択。
+//  8. 構成プロパティ＞リンカー＞入力 で項目を開き、モジュール定義ファイルに「../load_dll/load_dll.def」と書き込む。
+//  9. 構成プロパティ＞リンカー＞詳細設定 で項目を開き、データ実行防止(DEP)を「いいえ(/NXCOMPAT:NO)」にする。
+// 10. OKボタンでプロパティを閉じる。
+// 11. メニュー下2段目にあるソリューション構成で「hsp3ld」を選択。(x86とか書いてあるボックスの左隣りのボックス)
+// 12. メニュー＞ビルド＞ソリューションのビルド を実行。問題なければファイルが作られる。
+// 13. tags\3.6\hsp3\win32gui\hsp3ld\hsp3.exe を「hsp3ld.hrt」にリネーム。
+// (ここでhsp36フォルダをコピーして開発環境を別場所に作っておくと良いかもしれません。)
+// 14. packdll_101\お試し用開発環境\hspcmp.dllをhsp36フォルダにコピー。(元からあるhspcmp.dllをhspcmp_.dll等にリネームしておく。)
+// (↑このhspcmp.dllが必要なのの理屈が分かっていない・・・。これが必要なければ環境を別場所に用意することなく利用できるはずなのに。)
+// 15. hsp36\runtimeフォルダにhsp3ld.hrtをコピー。
+// 16. これで「実行ファイル自動作成 (Ctrl+F9)」ができるようになります。(まだ「実行 (F5)」は動作しません。)
+// **. ◆◆「実行 (F5)」出来るようにするには ◆◆
+// *1. 項目5のコピー元に「Release」を使用して項目6～12を同様に行う。
+// *2. 出力されたhsp3.exeを「hsp3ld.exe」にリネームしてhsp36フォルダに置く。
+// *3. これで「実行 (F5)」でも動作するようになります。
+//------------------------------------------------------------------------------
+// /packdll - 可能であれば実行ファイルにdllを埋め込んでみる
+//==============================================================================
+
+
+#include "user32.as"
+#include "gdi32.as"
+#include "kernel32.as"
+#uselib "shlwapi.dll"
+#func global PathIsDirectory "PathIsDirectoryA" sptr
+#uselib "winmm.dll"
+#cfunc global timeGetTime "timeGetTime"
+
+#include "mod_regexp.as"
+#include "hspinet.as"
+#include "hspext.as"
+#define global AnonLabel %tanonymouslabel *%i:if(0):*%o:if(1)
+#define global DownUnzipLabel %tanonymouslabel *%i:if(0):*%o:if(1)  ; HSP3.31互換のため
+
+//==============================================================================
+// 定数
+//------------------------------------------------------------------------------
+#const HKEY_CLASSES_ROOT      0x80000000
+#const HKEY_CURRENT_USER      0x80000001
+#const HKEY_LOCAL_MACHINE     0x80000002
+#const DIRINFO_APPDATA        0x0001001a
+#const DIRINFO_LOCAL_APPDATA  0x0001001c
+#const DIRINFO_PROFILE        0x00010028
+//------------------------------------------------------------------------------
+// /定数
+//==============================================================================
+
+//==============================================================================
+// 互換 (packdll ver.1.01同梱の開発環境だとHSP3.31)
+//------------------------------------------------------------------------------
+#if __hspver__ < 13573  ; 0x3505
+// 	mes命令で第2パラメーターに1を指定した場合、改行しない機能
+#undef mes
+#module gokan
+#define global mes(%1="",%2=0) mes@gokan %1,%2
+#deffunc mes@gokan str p1, int p2
+	mcxy = ginfo_cx,ginfo_cy
+	mes@hsp p1
+	if p2&1 : pos mcxy(0)+ginfo_mesx, mcxy(1)
+	return
+#global
+#endif
+// 上記以外にもバージョン違いで使えなくなる機能もあるので注意
+// ・#funcで宣言されたDLL関数を、関数としても使用できるように(0x3503～)
+// ・ユーザー定義命令/関数でのラベル引数の実装(0x3503～)
+//   ↑Downloader/Unzipper命令周りでも対処しているので要確認
+//------------------------------------------------------------------------------
+// packdll-HSP3.6対応版でもhspcmp.dllがpackdll同梱物になるので
+// hspver = 0x3607
+// __hspver__ = 0x3316
+// となって↑の切り分けは意味ないみたい。
+// (ただ#ifにhspverは使えないのでどうしようもなさそう)
+//------------------------------------------------------------------------------
+// /互換
+//==============================================================================
+
+//==============================================================================
+// 各種モジュールの登録
+//------------------------------------------------------------------------------
+//--------------------------------------
+// Windowsバージョン取得
+//--------------------------------------
+#module
+#uselib "kernel32"
+#func GetVersionEx "GetVersionExA" sptr
+#uselib "NTDLL.dll"
+#func RtlGetVersion "RtlGetVersion" sptr
+#deffunc GetWinVer
+	dim osver, 37 : osver(0) = 148 : GetVersionEx varptr(osver)
+	if osver(1) >= 6 : RtlGetVersion varptr(osver)
+	return
+#defcfunc IsWin11orOver
+	if osver == 0 : GetWinVer
+	return (osver(1)>10 || (osver(1)==10&&osver(3)>=22000))
+#defcfunc IsWin10orOver
+	if osver == 0 : GetWinVer
+	return (osver(1)>=10)
+#defcfunc IsWin8_1orOver
+	if osver == 0 : GetWinVer
+	return (osver(1)>=10 || (osver(1)==6&&osver(2)>=3))
+#defcfunc IsWin8orOver
+	if osver == 0 : GetWinVer
+	return (osver(1)>=10 || (osver(1)==6&&osver(2)>=2))
+#defcfunc IsWin7orOver
+	if osver == 0 : GetWinVer
+	return (osver(1)>=10 || (osver(1)==6&&osver(2)>=1))
+#global
+
+//--------------------------------------
+// レジストリ操作
+//--------------------------------------
+#module
+#uselib "advapi32.dll"
+#func RegCloseKey "RegCloseKey" sptr
+#func RegCreateKeyExA "RegCreateKeyExA" sptr,sptr,sptr,sptr,sptr,sptr,sptr,sptr,sptr
+#func RegOpenKeyExA "RegOpenKeyExA" sptr,sptr,sptr,sptr,sptr
+#func RegQueryValueExA "RegQueryValueExA" sptr,sptr,sptr,sptr,sptr,sptr
+#func RegSetValueExA "RegSetValueExA" sptr,sptr,sptr,sptr,sptr,sptr
+#uselib "Shlwapi.dll"
+#func SHDeleteKeyA "SHDeleteKeyA" sptr,sptr
+
+#const REG_OPTION_NON_VOLATILE 0x00000000
+#const REG_SZ                  0x00000001
+#const REG_DWORD               0x00000004
+#const KEY_QUERY_VALUE         0x00000001
+#const KEY_WOW64_64KEY         0x00000100
+#const KEY_WRITE               0x00020006
+
+#define global ctype GetRegStrValue(%1,%2,%3="") _GetRegStrValue(%1,%2,%3)
+#defcfunc _GetRegStrValue int hKey_value, str subKey, str name
+	// レジストリキーをオープン
+	RegOpenKeyExA hKey_value, subKey, 0, KEY_QUERY_VALUE, varptr(hkey)
+	if stat != 0 : return ""
+
+	// データのサイズを取得
+	RegQueryValueExA hkey, name, 0, 0, 0, varptr(size)
+	if stat != 0 {
+		result = ""
+	} else {
+		// 文字列データを取得
+		sdim result, size
+		RegQueryValueExA hkey, name, 0, 0, varptr(result), varptr(size) 
+	}
+	// レジストリキーのハンドルをクローズ
+	RegCloseKey hkey
+	return result
+
+#deffunc SetRegStrValue int hKey_value, str subKey, str name, str data
+	; レジストリキーを作成（またはオープン）
+	RegCreateKeyExA hKey_value, subKey, 0, 0, REG_OPTION_NON_VOLATILE, KEY_WRITE|KEY_WOW64_64KEY, 0, varptr(hkey), 0
+	if stat != 0 : return -1
+	
+	; 文字列データを値 "DataString" として書き込む
+	RegSetValueExA hkey, name, 0, REG_SZ, data, strlen(data)+1
+	
+	; レジストリキーのハンドルをクローズ
+	RegCloseKey hkey
+	return
+
+#deffunc DeleteRegSubkey int hKey_value, str subKey
+	SHDeleteKeyA hKey_value, subKey
+return
+#global
+
+//--------------------------------------
+// 特殊システムフォルダパス取得
+//--------------------------------------
+#module
+#uselib "SHELL32.DLL"
+#func SHGetKnownFolderPath "SHGetKnownFolderPath" int,int,int,int
+#uselib "OLE32.dll"
+#func IIDFromString "IIDFromString" sptr,sptr
+#func CoTaskMemFree "CoTaskMemFree" int
+
+#defcfunc GetKnownFolderPath str guid
+	sdim psW_guid,78
+	dim piid_guid,4
+	cnvstow psW_guid, guid
+	IIDFromString varptr(psW_guid), varptr(piid_guid)
+	
+	SHGetKnownFolderPath varptr(piid_guid),0,0,varptr(pFolderW)
+	c=0
+	repeat 1024
+		dupptr nullnull, pFolderW + cnt, 2, 4
+		if nullnull = 0 : c = cnt+2 : break
+	loop
+	if c = 0 : return ""
+	dupptr folderW, pFolderW, c, 2
+	folder = cnvwtos(folderW)
+	CoTaskMemFree pFolderW
+	return folder
+#global
+
+//--------------------------------------
+// サブディレクトリ含めたフォルダ削除
+//--------------------------------------
+#module
+#uselib "shell32"
+#func SHFileOperation "SHFileOperationA" int
+#deffunc deletefolder str _dir
+	sdim pFrom, 260
+	pFrom = _dir
+
+	dim SHFILEOPSTRUCT, 8
+	SHFILEOPSTRUCT.0 = hWnd
+	SHFILEOPSTRUCT.1 = 0x0003 // FO_DELETE
+	SHFILEOPSTRUCT.2 = varptr( pFrom )
+	SHFILEOPSTRUCT.3 = 0
+	SHFILEOPSTRUCT.4 = 0x0114 // FOF_SIMPLEPROGRESS | FOF_NOCONFIRMATION
+
+	SHFileOperation varptr( SHFILEOPSTRUCT )
+	return stat
+#global
+
+//--------------------------------------
+// ツールチップ
+//--------------------------------------
+#module
+#uselib "user32.dll"
+#func GetClientRect "GetClientRect" int,int
+// ツールチップ設定
+#deffunc SetTooltip int hObj, str _text
+	if inited == 0 {
+		// 初期化
+		gcxy = ginfo_cx, ginfo_cy
+		winobj "tooltips_class32", "", 0, 3
+		htooltip = objinfo_hwnd(stat)
+		dim RECT, 4 : RECT = 3,3,3,3
+		SendMsg htooltip, $00D3/*TTM_SETMARGIN*/, 0, varptr(RECT)  ; マージン
+		SendMsg htooltip, $0418/*TTM_SETMAXTIPWIDTH*/, 0, 640  ; tipwidth
+		SendMsg htooltip, $0403/*TTM_SETDELAYTIME*/, 2, 30000  ; 表示時間
+		dim TOOLINFO, 11
+		pos gcxy(0), gcxy(1)
+	}
+	text = _text
+	GetClientRect hObj, varptr(RECT)
+	TOOLINFO(0) = 40, $10, hObj, 0, RECT.0, RECT.1, RECT.2, RECT.3, 0, varptr(text)
+	SendMsg htooltip, $0404/*TTM_ADDTOOL*/, 0, varptr(TOOLINFO)
+	return
+#global
+
+//--------------------------------------
+// utf8で使えるreplace
+//--------------------------------------
+#module
+#uselib "bregonig.dll"
+#func BoSubst "BoSubst" sptr, sptr, sptr, int, int, int, int, int, int
+#func BRegfree "BRegfree" int
+#defcfunc replaceUTF8 str _strstart, str _pattern, str _subst, int p4, int p5, int p6
+	if inited == 0 : sdim msg, 80 : inited = 1
+	strstart = _strstart
+	strstartp = varptr(strstart)
+	targetstartp = strstartp
+	targetendp = strstartp + strlen(strstart)
+	option = "8i"
+	if p4 == 1 : option = "8"
+	if p5 == 0 : option += "g"
+	if p6 == 0 : option += "m"
+	rxp = 0
+	
+	BoSubst _pattern, _subst, option, strstartp, targetstartp, targetendp, 0, varptr(rxp), varptr(msg)
+	if stat <= 0 : return _strstart
+	
+	dupptr rx, rxp, 44, 4
+	dupptr out_, rx(0), rx(1)-rx(0)+1, 2
+	out = out_
+	BRegfree rxp
+	return out
+#global
+
+//--------------------------------------
+// 一連処理まとめ（ルーチンモジュール）
+//--------------------------------------
+#module MyRoutine
+#deffunc init@MyRoutine
+	sdim pipe_ln, 4096
+	sdim pipe_buf, 64000
+	WORD_LF = "a" : poke WORD_LF, 0, $0a
+	return
+	
+// ファイルダウンロード
+#if __hspver__ < 13571  ; 0x3503
+	#define global Downloader(%1,%2,%3) %tanonymouslabel messageLabel@MyRoutine=*%i:_Downloader %1,%2 : %3
+	#undef DownUnzipLabel
+	#define global DownUnzipLabel %tanonymouslabel if(0):*%o:if(1)
+	#deffunc _Downloader str loadUrl, str folderPath_downloads
+#else
+	#define global Downloader(%1,%2,%3) _Downloader %1,%2,%3
+	#deffunc _Downloader str loadUrl, str folderPath_downloads, label messageLabel
+#endif
+	// ファイルサイズ取得
+	fileSize = 0
+	neturl@ getpath(loadUrl,32)
+	netfileinfo@ p, getpath(loadUrl,8)
+	if stat == 0 : fileSize = int(submatch(p,"Content-Length: (\\d*)\n"))
+	if fileSize == 0 : fileSize = 1  ; 0割りを防ぐため
+	
+	dirCur = dir_cur
+	chdir folderPath_downloads
+	// ランタイム(cabファイル)ダウンロード
+	netrequest@ getpath(loadUrl,8)
+	mref refs,65
+	do
+		wait 10 : netexec@ res
+		exist getpath(loadUrl,8)
+		refs = strf("% 3.1f %%",limitf(1.0*strsize/(1.0*fileSize/100),0.0,100.0))
+		gosub messageLabel
+	until res  ; ダウンロードループ
+	chdir dirCur
+	return folderPath_downloads + "\\" + getpath(loadUrl,8)
+
+// zipファイル展開
+#if __hspver__ < 13571  ; 0x3503
+	#define global Unzipper(%1,%2,%3) %tanonymouslabel messageLabel@MyRoutine=*%i:_Unzipper %1,%2 : %3
+	#deffunc _Unzipper str zipFilePath, str folderPath_unzip
+#else
+	#define global Unzipper(%1,%2,%3) _Unzipper %1,%2,%3
+	#deffunc _Unzipper str zipFilePath, str folderPath_unzip, label messageLabel
+#endif
+	// 展開後ファイル数を取得
+	cmd = "cmd /c powershell \"add-type -assemblyname system.io.compression.filesystem;[io.compression.zipfile]::openread('"+zipFilePath+"').entries | ft length\""
+	pipe_buf = "" : pipe_ln = ""
+	pipeexec@ pipe_buf, cmd, 0
+	do : wait 1 : pipeget@ pipe_ln : until stat==0
+
+	index = 0
+	getstr dummy, pipe_buf, index : index += strsize
+	getstr dummy, pipe_buf, index : index += strsize
+	getstr dummy, pipe_buf, index : index += strsize
+	pipe_buf = strmid(pipe_buf, index, strlen(pipe_buf))
+	strrep pipe_buf, " ", ""
+	dirStrLength = strlen(pipe_buf)
+
+	// 展開後のトップのフォルダ名を取得
+	cmd = "cmd /c powershell \"add-type -assemblyname system.io.compression.filesystem;[io.compression.zipfile]::openread('"+zipFilePath+"').entries[0] | ft -a fullname\""
+	pipe_buf = "" : pipe_ln = ""
+	pipeexec@ pipe_buf, cmd, 0
+	do : wait 1 : pipeget@ pipe_ln : until stat==0
+	index = 0
+	getstr dummy, pipe_buf, index : index += strsize
+	getstr dummy, pipe_buf, index : index += strsize
+	getstr dummy, pipe_buf, index : index += strsize
+	pipe_buf = strmid(pipe_buf, index, strlen(pipe_buf))
+	pipe_buf = strtrim(pipe_buf, 1)
+	getstr topFolderName_unzip, pipe_buf, 0, '/'
+
+	// 実際に展開
+	pipe_buf = "" : pipe_ln = ""
+	rootOfDrive = ""
+	if strlen(folderPath_unzip) == 2 : rootOfDrive = "\\"  ; ドライブ直下C:\とかだとC:で来ているので
+	cmd = "cmd /c powershell \"Expand-Archive -Path '"+zipFilePath+"' -DestinationPath '"+folderPath_unzip + rootOfDrive+"'\" -Force"
+	pipeexec@ pipe_buf, cmd, 0
+	// 展開開始されるまで待機
+	repeat
+		wait 75
+		PathIsDirectory folderPath_unzip+"\\"+topFolderName_unzip
+		if stat != 0 : break
+	loop
+	// 展開を確認してからchdir
+	dirCur = dir_cur
+	chdir folderPath_unzip + "\\" + topFolderName_unzip
+	dirlist2h@ 4
+	mref refs,65
+	do : wait 100
+		dirlist2@ d2size, "*", 1
+		refs = strf("% 3.1f %%",limitf(1.0*d2size/(1.0*dirStrLength/100),0.0,100.0))
+		gosub messageLabel
+		pipeget@ pipe_ln
+	until stat==0
+	chdir dirCur
+	return folderPath_unzip + "\\" + topFolderName_unzip
+
+// settings.jsonファイルの内容に項目を追加する
+#deffunc SettingsJson_Add var noteTextUTF8, str name, str value, int isArgvJson
+	replaced = 0
+	noteTextUTF8_ = noteTextUTF8
+	if isArgvJson {
+		WORD_Ret = WORD_LF
+		WORD_Tab = "\t"
+	}else {
+		WORD_Ret = "\n"
+		WORD_Tab = "    "
+	}
+	// 本当はjsonコメントアウトできない。でもVSCodeのjsonは書いてあるときあるからjsonopenでバグらないように回避
+	noteTextUTF8_ = replaceUTF8( noteTextUTF8, "/\\*[\\s\\S]*?\\*/", "" )
+	noteTextUTF8_ = replaceUTF8( noteTextUTF8_, "//.*?$", "" )
+	jsonopen@ jspRoot, noteTextUTF8_
+	jsongetobj@ jspNow, name
+	if jspNow != 0 {
+		// 置換または必要なければそのまま
+		jsonout@ outJs, jspNow
+		if replaceUTF8( outJs, "[\\s\n]+", "" )  != replaceUTF8( value, "[\\s\n]+", "" ) {
+			if strmid(outJs,0,1)=="[" && strmid(outJs,-1,1)=="]" : outJs = "[ "+strmid(outJs,1,strlen(outJs)-2)+" ]"
+			if strmid(outJs,0,1)=="{" && strmid(outJs,-1,1)=="}" : outJs = "{ "+strmid(outJs,1,strlen(outJs)-2)+" }"
+			outJs_dblBS = preg_quote( "\""+name+"\" : "+outJs )
+			outJs_dblBS = replaceUTF8( outJs_dblBS, "\"\\s*:\\s*(\"|\\\\\\[|\\\\\\{)", "\"\\\\s*:\\\\s*$1" )
+			outJs_dblBS = replaceUTF8( outJs_dblBS, "[\\s"+WORD_Ret+"]+", "[\\\\\\s"+WORD_Ret+"]*" )
+			value_dblBS = "\""+name+"\": "+value
+			strrep value_dblBS, "\\", "\\\\"  ; replaceUTF8で使用している正規表現ライブラリは置換後文字列の\にエスケープが必要なので\\にする
+			noteTextUTF8 = replaceUTF8( noteTextUTF8, outJs_dblBS, value_dblBS, 0, 1, 0 )
+			replaced = 1
+		}
+	}else {
+		// 追加
+		value_dblBS = value
+		strrep value_dblBS, "\\", "\\\\"  ; replaceUTF8で使用している正規表現ライブラリは置換後文字列の\にエスケープが必要なので\\にする
+		patrn = "(["+WORD_Ret+"\\s]*}["+WORD_Ret+"\\s]*$)"
+		subst = ","
+		if submatch(noteTextUTF8, "(.)"+patrn,0,1) == "{" : subst = ""
+		subst += WORD_Ret+WORD_Tab+"\""+name+"\": "+value_dblBS+"$1"
+		nkfcnv@ patrnUTF8, patrn, "wS"
+		nkfcnv@ substUTF8, subst, "wS"
+		noteTextUTF8 = replaceUTF8( noteTextUTF8, patrnUTF8, substUTF8, 0,1,1 )
+		replaced = 1
+	}
+	jsonclose@
+	return replaced
+
+// settings.jsonファイルの内容に項目を追加する
+#deffunc SettingsJson_Delete var noteTextUTF8, str name, int isArgvJson
+	replaced = 0
+	noteTextUTF8_ = noteTextUTF8
+	if isArgvJson {
+		WORD_Ret = WORD_LF
+		WORD_Tab = "\t"
+	}else {
+		WORD_Ret = "\n"
+		WORD_Tab = "    "
+	}
+	// 本当はjsonコメントアウトできない。でもVSCodeのjsonは書いてあるときあるからjsonopenでバグらないように回避
+	noteTextUTF8_ = replaceUTF8( noteTextUTF8, "/\\*[\\s\\S]*?\\*/", "" )
+	noteTextUTF8_ = replaceUTF8( noteTextUTF8_, "//.*?$", "" )
+	jsonopen@ jspRoot, noteTextUTF8_
+	jsongetobj@ jspNow, name
+	if jspNow != 0 {
+		// まるまる削除
+		jsonout@ outJs, jspNow
+		if strmid(outJs,0,1)=="[" && strmid(outJs,-1,1)=="]" : outJs = "[ "+strmid(outJs,1,strlen(outJs)-2)+" ]"
+		if strmid(outJs,0,1)=="{" && strmid(outJs,-1,1)=="}" : outJs = "{ "+strmid(outJs,1,strlen(outJs)-2)+" }"
+		outJs_dblBS = preg_quote( " \""+name+"\" : "+outJs )
+		outJs_dblBS = replaceUTF8( outJs_dblBS, "\"\\s*:\\s*(\"|\\\\\\[|\\\\\\{)", "\"\\\\s*:\\\\s*$1" )
+		outJs_dblBS = replaceUTF8( outJs_dblBS, "[\\s"+WORD_Ret+"]+", "[\\\\\\s"+WORD_Ret+"]*" )
+		outJs_dblBS = "(\\{)?(,)?[\\s"+WORD_Ret+"]*" + outJs_dblBS
+		value_dblBS = "$1"
+		noteTextUTF8 = replaceUTF8( noteTextUTF8, outJs_dblBS, value_dblBS, 0, 1, 0 )
+		noteTextUTF8 = replaceUTF8( noteTextUTF8, "\\{,?", "{", 0, 1, 0 )
+		replaced = 1
+	}
+	jsonclose@
+	return replaced
+
+// keybindings.jsonファイルの内容に項目を追加する
+#deffunc KeybindingsJson_Add var noteTextUTF8, str key, str command, str when
+	replaced = 0
+	WORD_Tab = "    "
+	regBlock = match(noteTextUTF8, "{[\n\\s]*\"key\"\\s*:\\s*\""+key+"\",[\n\\s]*\"command\"\\s*:\\s*\""+command+"\",[\n\\s]*\"when\"\\s*:\\s*\""+when+"\"[\n\\s]*}")  ; match, submatch は utf8対応じゃないけどsjisの範囲を検索しないので...
+	if regBlock == "" {
+		nakami = submatch( noteTextUTF8, "^\\[([\\s\\S]+)\\]" )  ;
+		if nakami == "" {
+			noteTextUTF8 = "[\n"+WORD_Tab+"{\n"+WORD_Tab+WORD_Tab+"\"key\": \""+key+"\",\n"+WORD_Tab+WORD_Tab+"\"command\": \""+command+"\",\n"+WORD_Tab+WORD_Tab+"\"when\": \""+when+"\"\n"+WORD_Tab+"}\n]"
+		}else :if instr(nakami,0,"{") != -1 {
+			patrn = "}([\n\\s]+?)\\]"
+			subst = "},\n"+WORD_Tab+"{\n"+WORD_Tab+WORD_Tab+"\"key\": \""+key+"\",\n"+WORD_Tab+WORD_Tab+"\"command\": \""+command+"\",\n"+WORD_Tab+WORD_Tab+"\"when\": \""+when+"\"\n"+WORD_Tab+"}$1]"
+			nkfcnv@ patrnUTF8, patrn, "wS"
+			nkfcnv@ substUTF8, subst, "wS"
+			noteTextUTF8 = replaceUTF8( noteTextUTF8, patrnUTF8, substUTF8 )
+		}else {
+			patrn = "^\\[([\\s\\S]*)\\]"
+			subst = "[\n"+WORD_Tab+"{\n"+WORD_Tab+WORD_Tab+"\"key\": \""+key+"\",\n"+WORD_Tab+WORD_Tab+"\"command\": \""+command+"\",\n"+WORD_Tab+WORD_Tab+"\"when\": \""+when+"\"\n"+WORD_Tab+"}\n]"
+			nkfcnv@ patrnUTF8, patrn, "wS"
+			nkfcnv@ substUTF8, subst, "wS"
+			noteTextUTF8 = replaceUTF8( noteTextUTF8, patrnUTF8, substUTF8 )
+		}
+		replaced = 1
+	}
+	return replaced
+
+// 正規表現のメタ文字にエスケープを付ける
+#defcfunc preg_quote str text
+	text_ = text
+	strrep text_, "\\", "\\\\"
+	strrep text_, "*", "\\*"
+	strrep text_, ".", "\\."
+	strrep text_, "+", "\\+"
+	strrep text_, "?", "\\?"
+	strrep text_, "|", "\\|"
+	strrep text_, "{", "\\{"
+	strrep text_, "}", "\\}"
+	strrep text_, "(", "\\("
+	strrep text_, ")", "\\)"
+	strrep text_, "[", "\\["
+	strrep text_, "]", "\\]"
+	strrep text_, "^", "\\^"
+	strrep text_, "$", "\\$"
+	return text_
+
+// OpenHspInVSCode.exe を作成（埋め込んであるファイルをコピーして保存）
+#deffunc Create_OpenHspInVSCode_exe str path_hspFolder, str path_codeFile
+	PathIsDirectory path_hspFolder : if stat == 0 : return
+	bcopy "OHIVSCode.exe", path_hspFolder+"\\OpenHspInVSCode.exe"
+	notesel iniText
+	iniText = path_codeFile
+	notesave path_hspFolder+"\\OpenHspInVSCode.ini"
+	noteunsel
+	return
+
+// 現在開いているVSCodeウィンドウのハンドルを取得
+#deffunc GetVSCodeWindowHandle
+	ret = 0
+	GetDesktopWindow
+	GetTopWindow stat
+	hwnd_ = stat
+	sdim class, 256
+	sdim text, 256
+	repeat
+		if hwnd_ == 0 : break
+		GetClassName hwnd_, varptr(class), 256
+		GetWindowText hwnd_, varptr(text), 256
+		if class == "Chrome_WidgetWin_1" : if strmid(text, -1, 18) == "Visual Studio Code" : ret = hwnd_ : break
+		GetWindow hwnd_, 2/*GW_HWNDNEXT*/
+		hwnd_ = stat
+	loop
+	return ret
+#global
+init@MyRoutine
+//------------------------------------------------------------------------------
+// /各種モジュールの登録
+//==============================================================================
+
+//==============================================================================
+// 初期化
+//------------------------------------------------------------------------------
+	// 変数
+	sdim pipe_ln, 4096
+	sdim pipe_buf, 64000
+	folderPath_downloads = GetKnownFolderPath("{374DE290-123F-4565-9164-39C4925E467B}")  ; ダウンロードフォルダ
+	PathIsDirectory folderPath_downloads
+	if stat == 0 : folderPath_downloads = dirinfo(DIRINFO_LOCAL_APPDATA) + "\\Temp"  ; ユーザー/AppData/Local/Tempフォルダ
+	
+	// 定数
+	WORD_LF = "a" : poke WORD_LF, 0, $0a
+	
+	// PCのビットを確認
+	newcom WshShell, "WScript.Shell"
+	PROCESSOR_ARCHITECTURE = WshShell("ExpandEnvironmentStrings","%PROCESSOR_ARCHITECTURE%")
+	PROCESSOR_ARCHITEW6432 = WshShell("ExpandEnvironmentStrings","%PROCESSOR_ARCHITEW6432%")
+	delcom WshShell
+	bitStr = "-x64"  ; x64
+	if PROCESSOR_ARCHITECTURE == "x86" && PROCESSOR_ARCHITEW6432 != "AMD64" : bitStr = ""  ; x86
+
+	// 初期化処理
+	netinit
+	onexit *quit
+//------------------------------------------------------------------------------
+// /初期化
+//==============================================================================
+
+//==============================================================================
+// HSP3,VSCodeのインストール状況の確認
+//------------------------------------------------------------------------------
+//--------------------------------------
+// HSP3インストール状況確認
+//--------------------------------------
+	hspPath = ""
+	// レジストリのどこかにHSPインストールフォルダが登録されてないか調査
+	regHKey(0)=HKEY_CURRENT_USER : regSubKey(0)="Software\\Classes\\Applications\\hsed3.exe\\shell\\open\\command"
+	regHKey(1)=HKEY_CLASSES_ROOT : regSubKey(1)="Applications\\hsed3.exe\\shell\\open\\command"
+	regHKey(2)=HKEY_CURRENT_USER : regSubKey(2)="Software\\Classes\\.hsp_auto_file\\shell\\open\\command"
+	regHKey(3)=HKEY_CLASSES_ROOT : regSubKey(3)=".hsp_auto_file\\shell\\open\\command"
+	regHKey(4)=HKEY_CURRENT_USER : regSubKey(4)="Software\\Classes\\.hsp\\shell\\open\\command"
+	regHKey(5)=HKEY_CLASSES_ROOT : regSubKey(5)=".hsp\\shell\\open\\command"
+	regHKey(6)=HKEY_CLASSES_ROOT : regSubKey(6)="HSP3Script\shell\open\command"
+	foreach regHKey
+		path = GetRegStrValue( regHKey(cnt), regSubKey(cnt) )
+		if path == "" : continue
+		path = strtrim(path,0,'\"')
+		i = instr(path,0,"hsed3.exe")
+		if i == -1 : continue
+		path = strmid(path,0,i)
+		exist path + "hsed3.exe"
+		if strsize == -1 : continue
+		hspPath = strtrim(path,2,'\\') : break
+	loop
+	// HSP3フォルダをレジストリから取得できなかったときは通常インストール先を確認する
+	if hspPath == "" {
+		dirCur = dir_cur
+		chdir "C:\\"
+		dirlist dList, "hsp36", 5
+		chdir dirCur
+		notesel dList
+		repeat notemax
+			noteget temp, cnt
+			exist "C:\\" + temp+"\\hsed3.exe" : if strsize == -1 : continue
+			hspPath = "C:\\" + temp
+			if temp == "hsp36" : break
+		loop
+		noteunsel
+	}
+	
+	// hspcの確認
+	if hspPath != "" {
+		exist hspPath+"\\hspc334.exe"
+		if strsize != -1 : installed_hspc = 1
+	}
+	;logmes "HspPath="+hspPath
+	
+//--------------------------------------
+// vscodeインストール状況確認
+//--------------------------------------
+	// codeコマンドが登録されていたらそこからパスを取得
+	pipe_buf = "" : pipe_ln = ""
+	cmd = "cmd /c where code"
+	pipeexec pipe_buf, cmd, 0
+	do : wait 1 : pipeget pipe_ln : until stat==0
+	getstr codePath, pipe_buf, 0
+	// whereからのパスにcodeがいるか確認
+	exist codePath
+	if strsize == -1 {
+		// whereからは見つけられなかったら通常インストール先を確認する
+		codePath = dirinfo(DIRINFO_LOCAL_APPDATA)+"\\Programs\\Microsoft VS Code\\bin\\code"
+		pipe_buf = "" : pipe_ln = ""
+		cmd = "cmd /c \""+codePath+"\" -h"
+		pipeexec pipe_buf, cmd, 0
+		do : wait 1 : pipeget pipe_ln : until stat==0
+		if strmid(pipe_buf, 0, strlen("Visual Studio Code")) != "Visual Studio Code" : codePath = ""
+	}
+	;logmes "VSCodePath="+codePath
+	
+	// Shif-JISファイル文字化け対策設定の状況を確認
+	exist dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+	if strsize != -1 {
+		notesel noteText
+		noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+		noteunsel
+		if match(noteText,"\"files.autoGuessEncoding\"\\s*:\\s*true") != "" : vscode_settings_autoGuessEncoding = 1
+		if match(noteText, "\"\\[hsp3\\]\"\\s*:") != "" : vscode_settings_filesEncodingShiftjis = 1
+		if match(noteText,"\"security.workspace.trust.enabled\"\\s*:\\s*false") != "" : vscode_settings_trust = 1
+		if match(noteText,"\"editor.insertSpaces\"\\s*:\\s*false") != "" : vscode_settings_insertSpaces = 1
+	}
+	// 機能拡張のインストール状況を確認
+	if codePath != "" {
+		pipe_buf = "" : pipe_ln = ""
+		cmd = "cmd /c \""+codePath+"\" --list-extensions"
+		pipeexec pipe_buf, cmd, 0
+		do : wait 1 : pipeget pipe_ln : until stat==0
+		strrep pipe_buf, WORD_LF, "\n"
+		if instr(pipe_buf,0,"MS-CEINTL.vscode-language-pack-ja") != -1 : vscode_ext_JapaneseLanguagePack = 1
+		if instr(pipe_buf,0,"honobonosun.language-hsp3") != -1 : vscode_ext_LanguageHsp3 = 1
+		if instr(pipe_buf,0,"vain0x.hsp3-analyzer-mini") != -1 : vscode_ext_AnalyzerMini = 1
+	}
+	// ショートカットキー設定状況を確認
+	exist dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\keybindings.json"
+	if strsize != -1 {
+		notesel noteText
+		noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\keybindings.json"
+		noteunsel
+		vscode_settings_shortcutkey = 0
+		repeat 1
+			if match(noteText,"\"key\"\\s*:\\s*\"f5\"\\s*,[\n\\s]*\"command\"\\s*:\\s*\"language-hsp3.run\"\\s*,[\n\\s]*\"when\"\\s*:\\s*\"editorLangId\\s*==\\s*'hsp3'\"") == "" : break
+			if match(noteText,"\"key\"\\s*:\\s*\"f1\"\\s*,[\n\\s]*\"command\"\\s*:\\s*\"language-hsp3.helpman.search\"\\s*,[\n\\s]*\"when\"\\s*:\\s*\"editorLangId\\s*==\\s*'hsp3'\"") == "" : break
+			vscode_settings_shortcutkey = 1
+		loop
+	}
+	
+//--------------------------------------
+// 関連付け状況確認
+//--------------------------------------
+	assoced_user = 1
+	repeat 1
+		if GetRegStrValue( HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\.hsp\\UserChoice", "ProgId" ) != "" : break
+		if GetRegStrValue( HKEY_CURRENT_USER, "Software\\Classes\\.hsp" ) != "" : break
+		;if GetRegStrValue( HKEY_LOCAL_MACHINE, "SOFTWARE\\Classes\\.hsp" ) != "" {
+		;	if GetRegStrValue( HKEY_LOCAL_MACHINE, "SOFTWARE\\Classes\\HspInVSCode\\Shell\\Open\\Command" ) != "" : break
+		;}
+		assoced_user = 0
+	loop
+	if GetRegStrValue( HKEY_LOCAL_MACHINE, "SOFTWARE\\Classes\\HspInVSCode\\Shell\\Open\\Command" ) != "" : assoced_HspInVSCode = 1
+
+//------------------------------------------------------------------------------
+// /HSP,VSCodeのインストール状況の確認
+//==============================================================================
+
+//==============================================================================
+// GUI
+//------------------------------------------------------------------------------
+//--------------------------------------
+// 変数
+//--------------------------------------
+	input_HspInstallFolder = "C:\\"
+	if hspPath != "" : input_HspInstallFolder = "インストール済み -> "+hspPath
+	vscode_ext_notUseUtf8 = 1
+	vscode_opt_addpath = 1
+	vscode_opt_insertSpaces = 1
+	vscode_opt_trust = 1
+	hspforvscode_opt_assoc = 1
+
+//--------------------------------------
+// 設定
+//--------------------------------------
+	oncmd gosub *command, $111  ; WM_COMMAND
+	oncmd gosub *ctlcolorstatic, $138  ; WM_CTLCOLORSTATIC
+	// hFont簡易取得
+	screen 1,1,1,2 :font "ＭＳ Ｐゴシック", 12, 4 : mref BMSCR, 67
+	hFont = BMSCR.38 : gsel 0 : wait 1
+	CreateSolidBrush (250 | 250 << 8 | 250 << 16)
+	hBrush = stat  ; onexit -> DeleteObject
+
+//--------------------------------------
+// GUI作成
+//--------------------------------------
+	scSizeY = 550 : if assoced_user == 0 : scSizeY -= 40
+	screen 0, 640,scSizeY, 2, (ginfo_dispx-640)/2, (ginfo_dispy*90/100-scSizeY)/2
+	title APP_NAME
+	hwnd_0 = hwnd
+	color 250,250,250 : boxf : color 20,20,20
+	font MSGOTHIC, 12,1
+	objsize ,,18
+	pos 20, 15 : mes "インストール項目"
+	
+	gosub *DRAW_INSTALL_LIST
+
+if 0 {
+// インストール項目 - 進行状況リスト
+*DRAW_INSTALL_LIST
+	redraw 0
+	color 250,250,250 : boxf 0, 35, 288, 415
+	font MSGOTHIC, 12
+	pos 30, 35
+	
+	color 20,20,20
+	if hspPath != "" : pos 10, : font MSGOTHIC, 12,1 : mes "済", 1 : color 160,160,160
+	font MSGOTHIC, 12, (insSeq/10==1) : pos 30,
+	mes "1.    ", 1 : if hspPath != "" : font MSGOTHIC, 12,8+(insSeq/10==1)
+	mes "Hot Soup Processor 3.6"
+	font MSGOTHIC, 12, (insSeq==11) : pos 30,
+	mes "1-1.  ", 1 : if hspPath != "" || insSeq > 11 : font MSGOTHIC, 12,8+(insSeq==11)
+	mes " - ダウンロード"
+	font MSGOTHIC, 12, (insSeq==12) : pos 30,
+	mes "1-2.  ", 1 : if hspPath != "" || insSeq > 12 : font MSGOTHIC, 12,8+(insSeq==12)
+	mes " - アーカイブ展開、インストール"
+	
+	color 20,20,20
+	if installed_hspc == 1 : pos 10, : font MSGOTHIC, 12,1 : mes "済", 1 : color 160,160,160
+	font MSGOTHIC, 12, (insSeq/10==2) : pos 30,
+	mes "2.    ", 1 : if installed_hspc == 1 : font MSGOTHIC, 12,8+(insSeq/10==2)
+	mes "hspc"
+	font MSGOTHIC, 12, (insSeq==21) : pos 30,
+	mes "2-1.  ", 1 : if installed_hspc == 1 || insSeq > 21 : font MSGOTHIC, 12,8+(insSeq==21)
+	mes " - ダウンロード"
+	font MSGOTHIC, 12, (insSeq==22) : pos 30,
+	mes "2-2.  ", 1 : if installed_hspc == 1 || insSeq > 22 : font MSGOTHIC, 12,8+(insSeq==22)
+	mes " - アーカイブ展開、インストール"
+	
+	color 20,20,20
+	if codePath != "" && (vscode_settings_autoGuessEncoding != vscode_ext_notUseUtf8 && vscode_settings_filesEncodingShiftjis == vscode_ext_notUseUtf8) && vscode_ext_JapaneseLanguagePack == 1 && vscode_ext_LanguageHsp3 == 1 && vscode_ext_AnalyzerMini == 1 && vscode_settings_shortcutkey == 1 && (vscode_opt_trust==vscode_settings_trust) && (vscode_opt_insertSpaces==vscode_settings_insertSpaces) : pos 10, : font MSGOTHIC, 12,1 : mes "済", 1 : color 160,160,160
+	font MSGOTHIC, 12, (insSeq/10==3) : pos 30,
+	mes "3.    ", 1 : if codePath != "" && (vscode_settings_autoGuessEncoding != vscode_ext_notUseUtf8 && vscode_settings_filesEncodingShiftjis == vscode_ext_notUseUtf8) && vscode_ext_JapaneseLanguagePack == 1 && vscode_ext_LanguageHsp3 == 1 && vscode_ext_AnalyzerMini == 1 && vscode_settings_shortcutkey == 1 && (vscode_opt_trust == vscode_settings_trust) && (vscode_opt_insertSpaces==vscode_settings_insertSpaces) : font MSGOTHIC, 12,8+(insSeq/10==3)
+	mes "VSCode"
+	font MSGOTHIC, 12, (insSeq==31) : pos 30,
+	mes "3-1.  ", 1 : if codePath != "" || insSeq > 31 : font MSGOTHIC, 12,8+(insSeq==31)
+	mes " - ダウンロード"
+	font MSGOTHIC, 12, (insSeq==32) : pos 30,
+	mes "3-2.  ", 1 : if codePath != "" || insSeq > 32 : font MSGOTHIC, 12,8+(insSeq==32)
+	mes " - インストール"
+	font MSGOTHIC, 12, (insSeq==33) : pos 30,
+	mes "3-3.  ", 1 : if (codePath != "" && (vscode_settings_autoGuessEncoding != vscode_ext_notUseUtf8 && vscode_settings_filesEncodingShiftjis == vscode_ext_notUseUtf8)) || insSeq > 33 : font MSGOTHIC, 12,8+(insSeq==33)
+	mes " - 文字化け対策設定"
+	font MSGOTHIC, 12, (insSeq==34) : pos 30,
+	mes "3-4.  ", 1 : if (vscode_opt_insertSpaces == vscode_settings_insertSpaces) || insSeq > 34 : font MSGOTHIC, 12,8+(insSeq==34)
+	mes " - インデントタブ設定"
+	font MSGOTHIC, 12, (insSeq==35) : pos 30,
+	mes "3-5.  ", 1 : if (vscode_opt_trust == vscode_settings_trust) || insSeq > 35 : font MSGOTHIC, 12,8+(insSeq==35)
+	mes " - 制限モード無効設定"
+	font MSGOTHIC, 12, (insSeq==36) : pos 30,
+	mes "3-6.  ", 1 : if (codePath != "" && vscode_ext_JapaneseLanguagePack == 1) || insSeq > 36 : font MSGOTHIC, 12,8+(insSeq==36)
+	mes " - 日本語化"
+	font MSGOTHIC, 12, (insSeq==37) : pos 30,
+	mes "3-7.  ", 1 : if (codePath != "" && vscode_ext_LanguageHsp3 == 1) || insSeq > 37 : font MSGOTHIC, 12,8+(insSeq==37)
+	mes " - language-hsp3"
+	font MSGOTHIC, 12, (insSeq==38) : pos 30,
+	mes "3-8.  ", 1 : if (codePath != "" && vscode_ext_AnalyzerMini == 1) || insSeq > 38 : font MSGOTHIC, 12,8+(insSeq==38)
+	mes " - HSP3 アナライザー・ミニ (LSP)"
+	font MSGOTHIC, 12, (insSeq==39) : pos 30,
+	mes "3-9.  ", 1 : if (codePath != "" && vscode_settings_shortcutkey == 1) || insSeq > 39 : font MSGOTHIC, 12,8+(insSeq==39)
+	mes " - キーボードショートカット登録"
+	
+	
+	color 20,20,20
+	if assoced_user == 1 || assoced_HspInVSCode == 1 : pos 10, : font MSGOTHIC, 12,1 : mes "済", 1 : color 160,160,160
+	font MSGOTHIC, 12, (insSeq/10==4) : pos 30,
+	mes "4.    ", 1 : if hspforvscode_opt_assoc==0 || assoced_user == 1 || assoced_HspInVSCode == 1 : font MSGOTHIC, 12,8+(insSeq/10==4)
+	mes "拡張子関連付け"
+	font MSGOTHIC, 12, (insSeq==41) : pos 30,
+	mes "4-1.  ", 1 : if hspforvscode_opt_assoc==0 || assoced_user == 1 || assoced_HspInVSCode == 1 || insSeq > 41 : font MSGOTHIC, 12,8+(insSeq==41)
+	mes " - 登録"
+	redraw 1
+	return
+}
+	// （右側）インストール設定項目
+	color 20,20,20
+	font MSGOTHIC, 12, 1
+	pos 320, 15
+	mes "HSP3をインストールするフォルダを選択："
+	sdim UTF16, 64 : cnvstow UTF16, "通常インストール先 => C:\\"
+	cy = ginfo_cy
+	input input_HspInstallFolder, 240, 20
+	input_HspInstallFolder_objId = stat : objids(length.objids) = stat
+	sendmsg objinfo_hwnd( stat ), 0x1501/*EM_SETCUEBANNER*/, 1, varptr(UTF16)
+	SetTooltip objinfo_hwnd(input_HspInstallFolder_objId), "HSP3通常インストール先 => C:\\ 直下"
+	if hspPath != "" : objenable objids(length.objids-1), 0
+	objsize 60, 24
+	pos 570, cy-2
+	button gosub "選択", AnonLabel {
+		selFolMesText = "HSP3をインストールするフォルダを選択\nインストール済みなのに自動取得されなかった場合はHSP3フォルダを選択" 
+		;if hspPath != "" : selFolMesText = "HSP3インストールフォルダを選択\nHSP3.6以上のインストールフォルダも指定可能"   ; hspcはまだHsp3.7βに未対応の様子
+		sf="" : selfolder sf, selFolMesText
+		if stat != 0 : return
+		hspPath = ""
+		installed_hspc = 0
+		exist sf+"\\hsed3.exe"
+		if strsize != -1 : hspPath = sf
+		if hspPath != "" {
+			// hspcの確認
+			exist hspPath+"\\hspc334.exe"
+			if strsize != -1 : installed_hspc = 1
+			sf = "インストール済み -> "+hspPath
+		}
+		if vscode_ext_LanguageHsp3 != 0 {
+			vscode_ext_LanguageHsp3 = 2
+			if hspPath != "" {
+				notesel noteText
+				noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				noteunsel
+				CheckSettings_LanguageHsp3
+				if stat == 0 : vscode_ext_LanguageHsp3 = 1
+			}
+		}
+		if vscode_ext_AnalyzerMini != 0 {
+			vscode_ext_AnalyzerMini = 2
+			if hspPath != "" {
+				notesel noteText
+				noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				noteunsel
+				CheckSettings_AnalyzerMini
+				if stat == 0 : vscode_ext_AnalyzerMini = 1
+			}
+		}
+		objenable input_HspInstallFolder_objId, (hspPath == "")
+		objprm input_HspInstallFolder_objId, sf
+		gosub *DRAW_INSTALL_LIST
+		return
+	}
+	button_sansyo_id = stat
+	objids(length.objids) = stat
+	SetTooltip objinfo_hwnd(stat), "HSP3をインストールするフォルダを選択\nインストール済みなのに自動取得されなかった場合はHSP3インストールフォルダを選択"
+	objsize 165,18, 18
+	pos 335, ginfo_cy-1
+	chkbox "UTF8文字コードは扱わない", vscode_ext_notUseUtf8
+	vscode_ext_notUseUtf8_hwnd = objinfo_hwnd(stat)
+	objids(length.objids) = stat
+	SetTooltip vscode_ext_notUseUtf8_hwnd, "Shift-JIS固定でしかHSP3スクリプトを扱わない。\nこれにより文字コードの誤判定に煩わされないようになります。\n（文字コードについて詳しくない方はチェック推奨）"
+	
+	pos 320, ginfo_cy+20
+	mes "VSCode使用許諾"
+	winobj "static", "https://code.visualstudio.com/license", , $50000000 | $100, 200, 12 : objids(length.objids) = stat
+	hStatic_licence = objinfo_hwnd(stat)
+	LoadCursor 0, 32649 : SetClassLong hStatic_licence, -12, stat
+	sendmsg hStatic_licence, $30, hFont  ; ハイパーテキスト風に
+	if codePath != "" : objenable objids(length.objids-1), 0
+
+	pos 320, ginfo_cy+25
+	mes "VSCodeオプション"
+	objsize 300, 25, 25
+	chkbox "デスクトップ上にアイコンを作成する", vscode_opt_icon : objids(length.objids) = stat : SetTooltip objinfo_hwnd(stat), "VSCodeインストーラー設定"
+	objsize 300, 30, 31
+	text_ShowMoreWindow = "" : if IsWin11orOver() : text_ShowMoreWindow = "（show more option）"
+	chkbox "エクスプローラのファイルコンテキストメニューに\n[Codeで開く]アクションを追加する"+text_ShowMoreWindow, vscode_opt_menufiles : objids(length.objids) = stat : SetTooltip objinfo_hwnd(stat), "VSCodeインストーラー設定" : GetWindowLong objinfo_hwnd(objids(length.objids-1)),-16 : SetWindowLong objinfo_hwnd(objids(length.objids-1)), -16, stat | $2000
+	chkbox "エクスプローラのディレクトリコンテキストメニューに\n[Codeで開く]アクションを追加する"+text_ShowMoreWindow, vscode_opt_menufolders : objids(length.objids) = stat : SetTooltip objinfo_hwnd(stat), "VSCodeインストーラー設定" : GetWindowLong objinfo_hwnd(objids(length.objids-1)),-16 : SetWindowLong objinfo_hwnd(objids(length.objids-1)), -16, stat | $2000
+	chkbox "サポートされているファイルの種類のエディターとして\nCodeを登録する", vscode_opt_associate   : cmd += ",associatewithfiles" : objids(length.objids) = stat : SetTooltip objinfo_hwnd(stat), "VSCodeインストーラー設定" : GetWindowLong objinfo_hwnd(objids(length.objids-1)),-16 : SetWindowLong objinfo_hwnd(objids(length.objids-1)), -16, stat | $2000
+	chkbox "PATHへの追加（再起動後に使用可能）\n/コマンドプロンプトでcodeコマンドが使えるようになる", vscode_opt_addpath : objids(length.objids) = stat : SetTooltip objinfo_hwnd(stat), "VSCodeインストーラー設定" : GetWindowLong objinfo_hwnd(objids(length.objids-1)),-16 : SetWindowLong objinfo_hwnd(objids(length.objids-1)), -16, stat | $2000
+	if codePath != "" : repeat 5,1 : objenable objids(length.objids-cnt), 0 : loop
+	objsize 300, 25, 25 : pos ,ginfo_cy+2
+	chkbox "規定のインデントをスペースではなくタブにする", vscode_opt_insertSpaces : vscode_opt_insertSpaces_hwnd = objinfo_hwnd(stat) : objids(length.objids) = stat : SetTooltip objinfo_hwnd(stat), "VSCodeユーザー設定"
+	chkbox "制限モードを使わない（ワークスペースを常に信頼）", vscode_opt_trust : vscode_opt_trust_hwnd = objinfo_hwnd(stat) : objids(length.objids) = stat : SetTooltip objinfo_hwnd(stat), "VSCodeユーザー設定"
+	
+	objsize 195, 24, 12
+	pos 320, ginfo_cy+20
+	mes "関連付け" : cy = ginfo_cy
+	chkbox " . hsp . as 拡張子の関連付けを行う", hspforvscode_opt_assoc : hspforvscode_opt_assoc_hwnd = objinfo_hwnd(stat) : objids(length.objids) = stat
+	SetTooltip objinfo_hwnd(stat), "関連付けの解除方法：\nインストール終了後、再度このインストーラーを起動すると関連付けを解除するボタンが表示されます。"
+	if assoced_user {
+		objenable objids(length.objids-1), 0
+		color 200, 20,20
+		pos 523, cy+6 : font MSGOTHIC, 10, 1
+		#define linebox(%1,%2,%3,%4,%5=0,%6=0) line %1-%5,%2-%6,%1+%3+%5,%2-%6:line %1+%3+%5,%2-%6,%1+%3+%5,%2+%4+%6:line %1+%3+%5,%2+%4+%6,%1-%5,%2+%4+%6:line %1-%5,%2+%4+%6,%1-%5,%2-%6
+		mes "ユーザー設定済み" : linebox 523, cy+6, ginfo_mesx, ginfo_mesy, 2,2
+		pos 320, cy+27 : font MSGOTHIC, 10
+		mes "インストーラー側からは変更できないので\nインストール後Windowsの設定から関連付けを変更してください。"
+		pos ,ginfo_cy+3
+		mes "-> HSP3フォルダ\\",1 : font MSGOTHIC, 10,1 : mes "OpenHspInVSCode.exe",1 : font MSGOTHIC, 10 : mes" を指定。"
+		pos 320, ginfo_cy+1
+		winobj "static", "Windows設定＞既定のアプリ", , $50000000 | $100, 147, 12 : objids(length.objids) = stat
+		hStatic_assoc = objinfo_hwnd(stat)
+		LoadCursor 0, 32649 : SetClassLong hStatic_assoc, -12, stat
+		sendmsg hStatic_assoc, $30, hFont  ; ハイパーテキスト風に
+	}
+	if assoced_HspInVSCode {
+		ShowWindow hspforvscode_opt_assoc_hwnd, 0
+		pos 320, cy
+		button gosub "インストーラーで行った関連付けを削除", AnonLabel {
+			// 関連付け削除処理
+			dialog "関連付けを削除します",2,APP_NAME : if stat!=6 : return
+			maeRegHsp = GetRegStrValue( HKEY_LOCAL_MACHINE, "SOFTWARE\\Classes\\HspInVSCode", "PreviousAssocHsp" )  ; 前回値があれば削除じゃなくて元に戻す
+			maeRegAs = GetRegStrValue( HKEY_LOCAL_MACHINE, "SOFTWARE\\Classes\\HspInVSCode", "PreviousAssocAs" )
+			DeleteRegSubkey HKEY_LOCAL_MACHINE, "SOFTWARE\\Classes\\HspInVSCode"
+			if maeRegHsp == "" : DeleteRegSubkey HKEY_LOCAL_MACHINE, "SOFTWARE\\Classes\\.hsp" : else : SetRegStrValue HKEY_LOCAL_MACHINE, "SOFTWARE\\Classes\\.hsp", "", maeRegHsp
+			if maeRegAs == ""  : DeleteRegSubkey HKEY_LOCAL_MACHINE, "SOFTWARE\\Classes\\.as"  : else : SetRegStrValue HKEY_LOCAL_MACHINE, "SOFTWARE\\Classes\\.as", "", maeRegAs
+			ShowWindow button_assoced_hwnd, 0
+			ShowWindow hspforvscode_opt_assoc_hwnd, 1
+			assoced_HspInVSCode = 0
+			gosub *DRAW_INSTALL_LIST
+			return
+		}
+		button_assoced_hwnd = objinfo_hwnd(stat) : objids(length.objids) = stat
+	}
+	
+	// （下部）ボタン類
+	cy = ginfo_sy - 55
+	syscolor 4
+	boxf 0, cy, ginfo_sx, ginfo_sy
+	syscolor 0
+	line 0, cy, ginfo_sx, cy
+	line 290, 10, 290, cy-10
+	pos 410, cy+15
+	objsize 100, 24, 35 : button gosub "インストール", AnonLabel { dialog "セットアップ作業を行います。",2,"セットアップ開始" :if(stat==6){goto *install} : return }
+	objids(length.objids) = stat : button_install_id = stat
+	pos 520, cy+15
+	objsize 100, 24, 35 : button gosub "キャンセル", AnonLabel { dialog "セットアップ作業は完了していません。\n\nセットアップを終了しますか？",2,"セットアップ終了" :if(stat==6){goto *quit_} : return }
+	objids(length.objids) = stat
+aboutUninstall = {"【HSP3】
+・zipアーカイブ版を使用しています。
+・レジストリへの設定は行われていません。インストール先のフォルダを削除してください。
+・インストール済みだった場合 sample/basicフォルダ に HelloWorld_HspInVSCode.hsp が作られているので削除してください。
+
+【hspc】
+・HSP3インストールフォルダの hspc.exe, hspc334.exe を削除してください。
+
+【VSCode】
+・VSCodeのインストーラーを使用しています。（サイレントインストール）
+・Windows設定の「インストールされているアプリ」一覧からアンインストール処理を行ってください。
+
+【関連付け】
+・インストール後、再度このインストーラーを起動すると関連付けを解除するボタンが表示されます。
+・HSP3インストールフォルダの OpenHspInVSCode.exe, OpenHspInVSCode.ini も削除してください。
+
+インストールの為にダウンロードしたzip等の書庫ファイルはセットアップ完了後に削除しています。
+上記の各項目を実行すればアンインストール完了です。"}
+	pos 60, cy+15
+	objsize 140, 24, 35 : button gosub "アンインストールについて", AnonLabel { dialog aboutUninstall,0,"アンインストールについて" : return }
+	objids(length.objids) = stat
+	pos 20, cy+15
+	objsize 35, 24, 35 : button gosub "info", AnonLabel {
+		screen 2, 550,450, 0, (ginfo_dispx-550)/2, (ginfo_dispy*90/100-450)/2
+		title "info - "+APP_NAME
+	    hwnd_2 = hwnd
+	    GetWindowLong hwnd_2, -16
+	    SetWindowLong hwnd_2, -16, stat | $00010000 | $00020000 ^ $00010000 ^ $00020000  ; WS_MAXIMIZEBOX | WS_MINIMIZEBOX
+	    SetWindowLong hwnd_2, -8, hwnd_0
+		syscolor 4:color 250,250,250 : boxf : color 20,20,20 : font MSGOTHIC, 12 : objsize 100, 24, 15
+		pos 20, 15 : picload "icon32.png", 1
+		pos 65, 20 : mes APP_NAME + " - Ver. " + APP_VERSION_STR + "\n" + APP_COPYRIGHT
+		notesel SOURCE_CODE
+		exist "hsptmp" : if strsize != -1 : noteload "hsptmp" 
+		noteunsel
+		pos 10, 70 : mesbox SOURCE_CODE, ginfo_sx-20, ginfo_sy-120, 0
+		pos ginfo_sx-150, ginfo_sy-40 : button gosub "OK", AnonLabel { gsel 2,-1 : EnableWindow hwnd_0,1 : gsel 0,1 : return }
+	    EnableWindow hwnd_0, 0  ; 疑似モーダル
+		gsel 0
+		return
+	}
+	objids(length.objids) = stat
+	
+	objsize ,,18
+	gsel 0, 1
+	objsel button_install_id
+
+//--------------------------------------
+// オブジェクトに関してのoncmd先
+//--------------------------------------
+if 0 {
+*command
+	if (wparam>>16) != 0/*BN_CLICKED*/ : return
+	if hStatic_licence == lparam : exec "https://code.visualstudio.com/license?lang=ja", 16
+	if hStatic_assoc == lparam : exec "cmd /c start ms-settings:defaultapps",2
+	if hspforvscode_opt_assoc_hwnd == lparam : hspforvscode_opt_assoc = 1-hspforvscode_opt_assoc : gosub *DRAW_INSTALL_LIST
+	if vscode_opt_insertSpaces_hwnd == lparam : vscode_opt_insertSpaces = 1-vscode_opt_insertSpaces : gosub *DRAW_INSTALL_LIST
+	if vscode_opt_trust_hwnd == lparam : vscode_opt_trust = 1-vscode_opt_trust : gosub *DRAW_INSTALL_LIST
+	if vscode_ext_notUseUtf8_hwnd == lparam : vscode_ext_notUseUtf8 = 1-vscode_ext_notUseUtf8 : gosub *DRAW_INSTALL_LIST
+	return
+*ctlcolorstatic
+	if hStatic_licence = lparam || hStatic_assoc = lparam {
+		SetTextColor wparam, ($00 | $00 << 8 | $FF << 16)
+		SetBkMode wparam, 1
+	}
+	return hBrush
+}
+//------------------------------------------------------------------------------
+// /GUI
+//==============================================================================
+	stop
+
+//==============================================================================
+// インストール処理
+//------------------------------------------------------------------------------
+*install
+//--------------------------------------
+// インストール準備
+//--------------------------------------
+	if hspPath != "" {
+		folderPath_unzipHsp = hspPath
+	}else {
+		// 指定HSP3インストールフォルダ、ダウンロードフォルダ が存在するか確認
+		folderPath_unzipHsp = strtrim(input_HspInstallFolder, 2, '\\')
+		PathIsDirectory folderPath_unzipHsp
+		if stat == 0 : dialog "HSP3のインストール先が正しくありません。",1,APP_NAME : stop
+	}
+	// 右側の文字を全部消す
+	color 250,250,250 : boxf 292, 0, ginfo_sx, ginfo_sy-60
+	// すべてのオブジェクトを非表示にする
+	repeat length.objids-1, 1
+		objenable objids(cnt), 0
+		ShowWindow objinfo_hwnd(objids(cnt)), 0
+	loop
+	// ログ表示用のmesboxを表示
+	pos 320,15
+	mesbox_log = "" : logText = ""
+	mesbox mesbox_log, 300, ginfo_sy-85, 4
+	mesbox_log_id = stat
+	
+#define LOG_Add(%1) logText = %1+"\n"+logText : objprm mesbox_log_id, logText
+#define LOG_Temp(%1) if mesbox_log != %1+"\n"+logText { objprm mesbox_log_id, %1+"\n"+logText }
+//--------------------------------------
+// HSP3
+//--------------------------------------
+insSeq = 10 : gosub *DRAW_INSTALL_LIST
+if hspPath == "" {
+	LOG_Add "== HSP3 =="
+	// ダウンロード
+	insSeq = 11 : gosub *DRAW_INSTALL_LIST
+	hspUrl = "https://www.onionsoft.net/hsp/file/hsp36.zip"
+	LOG_Add "ダウンロード - " + hspUrl
+	LOG_Temp "HSP3 download - 準備中..."
+	Downloader hspUrl, folderPath_downloads, DownUnzipLabel{ LOG_Temp "HSP3 download - "+refstr : return }
+	if refstr == "" : LOG_Add "failed - stop" : stop  ; フォルダ
+	zipFilePath = refstr
+	LOG_Add "HSP3 download - 100.0 %"
+	LOG_Add "ダウンロード完了"
+	
+	// アーカイブ展開
+	insSeq = 12 : gosub *DRAW_INSTALL_LIST
+	LOG_Add "アーカイブ展開 - " + getpath(hspUrl,8)
+	LOG_Temp "HSP3 unzip - 準備中..."
+	Unzipper zipFilePath, folderPath_unzipHsp, DownUnzipLabel{ LOG_Temp "HSP3 unzip - "+refstr : return }
+	_hspPath = refstr
+	LOG_Add "HSP3 unzip - 100.0 %"
+	LOG_Add "アーカイブ展開完了"
+	LOG_Add "HSP3 インストール完了"
+	DeleteFile zipFilePath
+	LOG_Add "アーカイブ削除 - " + getpath(hspUrl,8)
+	hspPath = _hspPath
+	insSeq = 13 : gosub *DRAW_INSTALL_LIST
+}
+//--------------------------------------
+// hspc
+//--------------------------------------
+insSeq = 20 : gosub *DRAW_INSTALL_LIST
+if hspPath != "" && installed_hspc == 0 {
+	LOG_Add "== hspc =="
+	// ダウンロード
+	insSeq = 21 : gosub *DRAW_INSTALL_LIST
+	hspcUrl = "https://hsp.tv/contest/hspcontest1392.zip"
+	LOG_Add "ダウンロード - " + hspcUrl
+	LOG_Temp "hspc download - 準備中..."
+	Downloader hspcUrl, folderPath_downloads, DownUnzipLabel{ LOG_Temp "hspc download - "+refstr : return }
+	zipFilePath = refstr
+	LOG_Add "hspc download - 100.0 %"
+	LOG_Add "ダウンロード完了"
+	
+	// アーカイブ展開
+	insSeq = 22 : gosub *DRAW_INSTALL_LIST
+	LOG_Add "アーカイブ展開 - " + getpath(zipFilePath,8)
+	LOG_Temp "hspc unzip - 準備中..."
+	Unzipper zipFilePath, folderPath_unzipHsp, DownUnzipLabel{ LOG_Temp "hspc unzip - "+refstr : return }
+	unzippedPath = refstr
+	LOG_Add "hspc unzip - 100.0 %"
+	LOG_Add "アーカイブ展開完了"
+	
+	// hspc.exeをhspPathにコピー
+	exist unzippedPath + "\\hspc.exe"
+	if strsize!=-1 {
+		bcopy unzippedPath + "\\hspc.exe", hspPath + "\\hspc.exe"
+	}
+	exist unzippedPath + "\\hspc334.exe"
+	if strsize!=-1 {
+		bcopy unzippedPath + "\\hspc334.exe", hspPath + "\\hspc334.exe"
+	}
+	LOG_Add "hspc インストール完了"
+	DeleteFile zipFilePath
+	deletefolder unzippedPath
+	LOG_Add "アーカイブ削除 - " + getpath(zipFilePath,8)
+	installed_hspc = 1
+	insSeq = 23 : gosub *DRAW_INSTALL_LIST
+}
+if hspPath != "" {
+	exist hspPath+"\\runtime\\hsprt" : runtimeHsprt = (strsize==-1)
+	exist hspPath+"\\hsprt" : hspHsprt = (strsize!=-1)
+	if runtimeHsprt && hspHsprt {
+		bcopy hspPath+"\\hsprt", hspPath+"\\runtime\\hsprt"
+	}
+}
+
+//--------------------------------------
+// VSCode
+//--------------------------------------
+insSeq = 30 : gosub *DRAW_INSTALL_LIST
+if codePath == "" {
+	LOG_Add "== VSCode =="
+	// vscodeURLを取得
+	insSeq = 31 : gosub *DRAW_INSTALL_LIST
+	LOG_Add "VSCodeインストーラーのURLを取得"
+	pipe_buf = "" : pipe_ln = ""
+	if IsWin10orOver() {
+		url = "https://code.visualstudio.com/sha/download?build=stable&os=win32"+bitStr+"-user"
+	}else : if IsWin8orOver() {
+		url = "https://update.code.visualstudio.com/1.79.2/win32"+bitStr+"-user/stable"
+	}else {
+		url = "https://update.code.visualstudio.com/1.70.2/win32"+bitStr+"-user/stable"
+	}
+	cmd = "cmd /c powershell \"$url='"+url+"';$resp = Invoke-WebRequest $url -MaximumRedirection 0 -ErrorAction Ignore -UseBasicParsing;$resp.Headers.Location\""
+	pipeexec pipe_buf, cmd, 0
+	do : wait 1 : pipeget pipe_ln : until stat==0
+	if strmid(pipe_buf,0,17) == "Invoke-WebRequest" {
+		// TLS1.2未利用のエラーが出た場合、プロトコルを追加してやり直す
+		pipe_buf = "" : pipe_ln = ""
+		cmd = "cmd /c powershell \"[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12;$url='"+url+"';$resp = Invoke-WebRequest $url -MaximumRedirection 0 -ErrorAction Ignore -UseBasicParsing;$resp.Headers.Location\""
+		pipeexec pipe_buf, cmd, 0
+		do : wait 1 : pipeget pipe_ln : until stat==0
+	}
+	getstr vscodeUrl, pipe_buf, 0
+	
+	// ダウンロード
+	LOG_Add "ダウンロード - " + vscodeUrl
+	Downloader vscodeUrl, folderPath_downloads, DownUnzipLabel{ LOG_Temp "VSCode download - "+refstr : return }
+	vscodeInstallerFilePath = refstr
+	LOG_Add "VSCode download - 100.0 %"
+	LOG_Add "ダウンロード完了"
+
+	// サイレントインストール
+	insSeq = 32 : gosub *DRAW_INSTALL_LIST
+	LOG_Add "インストール - " + getpath(vscodeInstallerFilePath,8)
+	pipe_buf = "" : pipe_ln = ""
+	cmd = "cmd /c \""+vscodeInstallerFilePath+"\" /VERYSILENT /NORESTART /MERGETASKS=!runcode"
+	if vscode_opt_icon        : cmd += ",desktopicon"
+	if vscode_opt_menufiles   : cmd += ",addcontextmenufiles"
+	if vscode_opt_menufolders : cmd += ",addcontextmenufolders"
+	if vscode_opt_associate   : cmd += ",associatewithfiles"
+	if vscode_opt_addpath     : cmd += ",addtopath"
+	tGT = timeGetTime()
+	pipeexec pipe_buf, cmd, 0
+	do : wait 1 : LOG_Temp "VSCode インストール中 - "+((timeGetTime()-tGT)/1000)+"sec" : pipeget pipe_ln : until stat==0
+	LOG_Add "VSCode インストール完了"
+
+	DeleteFile vscodeInstallerFilePath
+	LOG_Add "アーカイブ削除 - " + getpath(vscodeInstallerFilePath,8)
+
+	// インストール後codePath再取得
+	LOG_Add "VSCodeインストールフォルダを取得"
+	pipe_buf = "" : pipe_ln = ""
+	cmd = "cmd /c where code"
+	pipeexec pipe_buf, cmd, 0
+	do : wait 1 : pipeget pipe_ln : until stat==0
+	getstr codePath, pipe_buf, 0
+	exist codePath
+	if strsize == -1 {
+		codePath = dirinfo(DIRINFO_LOCAL_APPDATA)+"\\Programs\\Microsoft VS Code\\bin\\code"
+		pipe_buf = "" : pipe_ln = ""
+		cmd = "cmd /c \""+codePath+"\" -h"
+		pipeexec pipe_buf, cmd, 0
+		do : wait 1 : pipeget pipe_ln : until stat==0
+		if strmid(pipe_buf, 0, strlen("Visual Studio Code")) != "Visual Studio Code" : codePath = ""
+	}
+}
+//--------------------------------------
+// VSCode の設定を行う前に設定ファイルがあるか確認。無ければ一瞬起動して作ってもらう。
+//--------------------------------------
+insSeq = 32 : gosub *DRAW_INSTALL_LIST
+if codePath != "" {
+	haveSettings = 1
+	exist dirinfo(DIRINFO_PROFILE)+"\\.vscode\\argv.json" : if strsize == -1 : haveSettings = 0
+	PathIsDirectory dirinfo(DIRINFO_APPDATA)+"\\Code\\User" : if stat == 0 : haveSettings = 0 : else : haveCodeUser = 1
+	if haveSettings == 0 {
+		LOG_Temp "VSCode 設定ファイル作成中..."
+		cmd = "cmd /c \""+codePath+"\""
+		pipeexec pipe_buf, cmd, 0
+		do : wait 1 : pipeget pipe_ln : until stat==0
+		repeat 100
+			wait 10  ; 10秒間はVSCodeウィンドウが開いたか確認
+			GetVSCodeWindowHandle  ; VSCodeのウィンドウハンドルを取得
+			vscodeHwnd = stat
+			if vscodeHwnd : break
+		loop
+		if vscodeHwnd {
+			repeat 100
+				wait 10  ; 本当に作られたか10秒間は再確認
+				haveSettings = 1
+				exist dirinfo(DIRINFO_PROFILE)+"\\.vscode\\argv.json" : if strsize == -1 : haveSettings = 0
+				PathIsDirectory dirinfo(DIRINFO_APPDATA)+"\\Code\\User" : if stat == 0 : haveSettings = 0
+				if haveSettings : break
+			loop
+			if haveSettings == 0 : codePath = ""  ; なんか上手く作られなかったら処理中断
+			sendmsg vscodeHwnd, 0x0010/*WM_CLOSE*/, 0, 0  ; VSCodeを閉じる
+		}
+		if haveSettings {
+			LOG_Add "VSCode - 定ファイル作成完了"
+		}else {
+			LOG_Add "VSCode - 定ファイル作成失敗"
+		}
+	}
+}
+//--------------------------------------
+// VSCode 機能拡張のインストールや各種設定を行う
+//--------------------------------------
+;insSeq = 32 : gosub *DRAW_INSTALL_LIST
+if codePath != "" {
+	
+	if (vscode_settings_autoGuessEncoding == vscode_ext_notUseUtf8 || vscode_settings_filesEncodingShiftjis != vscode_ext_notUseUtf8) || vscode_ext_JapaneseLanguagePack!=1 || vscode_ext_LanguageHsp3!=1 || vscode_ext_AnalyzerMini!=1 || vscode_settings_shortcutkey!=1 {
+		LOG_Add "== VSCode 拡張機能、各種設定 =="
+	}
+	
+	// Shift-JISを開いても文字化けしないように (files.autoGuessEncoding か [hsp3]files.encoding)
+	insSeq = 33 : gosub *DRAW_INSTALL_LIST
+	if vscode_ext_notUseUtf8 {
+		if vscode_settings_autoGuessEncoding == 1 || vscode_settings_filesEncodingShiftjis == 0 : LOG_Add "VSCode - 文字化け対策設定"
+		if vscode_settings_autoGuessEncoding == 1 {
+			exist dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+			if strsize == -1 {
+				noteText = "{\n    \"files.autoGuessEncoding\": false\n}"
+				notesel noteText
+				notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				noteunsel
+			}else {
+				notesel noteText
+				noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				replaced = 0
+				SettingsJson_Add noteText, "files.autoGuessEncoding", "false" : replaced |= stat
+				if replaced : notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				noteunsel
+			}
+			vscode_settings_autoGuessEncoding = 0
+		}
+		if vscode_settings_filesEncodingShiftjis == 0 {
+			exist dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+			if strsize == -1 {
+				noteText = "{\n    \"[hsp3]\": { \"files.encoding\": \"shiftjis\" }\n}"
+				notesel noteText
+				notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				noteunsel
+			}else {
+				notesel noteText
+				noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				replaced = 0
+				SettingsJson_Add noteText, "[hsp3]", "{ \"files.encoding\": \"shiftjis\" }" : replaced |= stat
+				if replaced : notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				noteunsel
+			}
+			vscode_settings_filesEncodingShiftjis = 1
+		}
+	}else {
+		if vscode_settings_autoGuessEncoding == 0 || vscode_settings_filesEncodingShiftjis == 1 : LOG_Add "VSCode - 文字化け対策設定"
+		if vscode_settings_filesEncodingShiftjis == 1 {
+			exist dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+			if strsize != -1 {
+				notesel noteText
+				noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				replaced = 0
+				SettingsJson_Delete noteText, "[hsp3]" : replaced |= stat
+				if replaced : notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				noteunsel
+			}
+		}
+		if vscode_settings_autoGuessEncoding == 0 {
+			exist dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+			if strsize == -1 {
+				noteText = "{\n    \"files.autoGuessEncoding\": true\n}"
+				notesel noteText
+				notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				noteunsel
+			}else {
+				notesel noteText
+				noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				replaced = 0
+				SettingsJson_Add noteText, "files.autoGuessEncoding", "true" : replaced |= stat
+				if replaced : notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				noteunsel
+			}
+			vscode_settings_autoGuessEncoding = 1
+		}
+	}
+	// 規定のインデントをスペースではなくタブにする
+	insSeq = 34 : gosub *DRAW_INSTALL_LIST
+	if vscode_settings_insertSpaces == 1 {
+		if vscode_opt_insertSpaces == 0 {
+			LOG_Add "VSCode - インデントタブ設定"
+			exist dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+			if strsize != -1 {
+				notesel noteText
+				noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				replaced = 0
+				SettingsJson_Add noteText, "editor.insertSpaces", "true" : replaced |= stat
+				if replaced : notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				noteunsel
+			}
+			vscode_settings_insertSpaces = 0
+		}
+	}else {
+		if vscode_opt_insertSpaces == 1 {
+			LOG_Add "VSCode - インデントタブ設定"
+			exist dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+			if strsize == -1 {
+				noteText = "{\n    \"editor.insertSpaces\": false\n}"
+				notesel noteText
+				notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				noteunsel
+			}else {
+				notesel noteText
+				noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				replaced = 0
+				SettingsJson_Add noteText, "editor.insertSpaces", "false" : replaced |= stat
+				if replaced : notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				noteunsel
+			}
+			vscode_settings_insertSpaces = 1
+		}
+	}
+	// 制限モード無効設定（セキュリティ：ワークスペース常に信頼）
+	insSeq = 35 : gosub *DRAW_INSTALL_LIST
+	if vscode_settings_trust == 1 {
+		if vscode_opt_trust == 0 {
+			LOG_Add "VSCode - 制限モード無効設定"
+			exist dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+			if strsize != -1 {
+				notesel noteText
+				noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				replaced = 0
+				SettingsJson_Add noteText, "security.workspace.trust.enabled", "true" : replaced |= stat
+				if replaced : notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				noteunsel
+			}
+			vscode_settings_trust = 0
+		}
+	}else {
+		if vscode_opt_trust == 1 {
+			LOG_Add "VSCode - 制限モード無効設定"
+			exist dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+			if strsize == -1 {
+				noteText = "{\n    \"security.workspace.trust.enabled\": false\n}"
+				notesel noteText
+				notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				noteunsel
+			}else {
+				notesel noteText
+				noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				replaced = 0
+				SettingsJson_Add noteText, "security.workspace.trust.enabled", "false" : replaced |= stat
+				if replaced : notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				noteunsel
+			}
+			vscode_settings_trust = 1
+		}
+	}
+	
+	// VSCode 日本語化
+	insSeq = 36 : gosub *DRAW_INSTALL_LIST
+	if vscode_ext_JapaneseLanguagePack != 1 {
+		LOG_Add "VSCode - 日本語化拡張機能インストール"
+		pipe_buf = "" : pipe_ln = ""
+		cmd = "cmd /c \""+codePath+"\" --install-extension MS-CEINTL.vscode-language-pack-ja"
+		pipeexec pipe_buf, cmd, 0
+		do : wait 1 : pipeget pipe_ln : until stat==0
+		exist dirinfo(DIRINFO_PROFILE)+"\\.vscode\\argv.json"
+		if strsize != -1 {
+			notesel noteText
+			noteload dirinfo(DIRINFO_PROFILE)+"\\.vscode\\argv.json"
+			SettingsJson_Add noteText, "locale", "\"ja\"", 1
+			if stat : notesave dirinfo(DIRINFO_PROFILE)+"\\.vscode\\argv.json"
+			noteunsel
+		}
+		vscode_ext_JapaneseLanguagePack = 1
+	}
+	// language-hsp3 for VSCode
+	insSeq = 37 : gosub *DRAW_INSTALL_LIST
+	if vscode_ext_LanguageHsp3 != 1 {
+		LOG_Add "VSCode - language-hsp3拡張機能インストール"
+		if vscode_ext_LanguageHsp3 == 0 {
+			pipe_buf = "" : pipe_ln = ""
+			cmd = "cmd /c \""+codePath+"\" --install-extension honobonosun.language-hsp3"
+			pipeexec pipe_buf, cmd, 0
+			do : wait 1 : pipeget pipe_ln : until stat==0
+		}
+		if hspPath != "" {
+			notesel noteText
+			noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+			CheckSettings_LanguageHsp3
+			if 0 {
+			#deffunc CheckSettings_LanguageHsp3
+			replaced = 0
+			dblBackSlash_path = hspPath+"\\hspc334.exe"
+			strrep dblBackSlash_path, "\\", "\\\\"
+			SettingsJson_Add noteText, "language-hsp3.compiler", "\""+dblBackSlash_path+"\"" : replaced |= stat
+			dblBackSlash_path = hspPath+"\\hsphelp\\helpman.exe"
+			strrep dblBackSlash_path, "\\", "\\\\"
+			SettingsJson_Add noteText, "language-hsp3.helpman.path.local", "\""+dblBackSlash_path+"\"" : replaced |= stat
+			// runCommands : w指定でデバッグウィンドウが出る。wの付け外しがしやすいように追加しておく。
+			SettingsJson_Add noteText, "language-hsp3.runCommands", "[\n        \"-dwCra\",\n        \"%FILEPATH%\"\n    ]" : replaced |= stat
+			;dblBackSlash_path = hspPath
+			;strrep dblBackSlash_path, "\\", "\\\\"
+			// makeCommands : hspc ver3.4.2 は--hsp3root指定しないとランタイムフォルダが上手く指定されないバグ(?)がある > #No file [C:\hsprt].  // hsp334では(hspc342も)hsp3rootあると実行ファイルが作られない(packfileまで)
+			;SettingsJson_Add noteText, "language-hsp3.makeCommands", "[\n        \"-PmCa --hsp3root \\\""+dblBackSlash_path+"\\\"\",\n        \"%FILEPATH%\"\n    ]" : replaced |= stat
+			return replaced
+			}
+			if stat : notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+			noteunsel
+		}
+		vscode_ext_LanguageHsp3 = 1
+	}
+	// HSP3 アナライザー・ミニ for VSCode
+	insSeq = 38 : gosub *DRAW_INSTALL_LIST
+	if vscode_ext_AnalyzerMini != 1 {
+		LOG_Add "VSCode - HSP3 アナライザー・ミニ (LSP)拡張機能インストール"
+		if vscode_ext_AnalyzerMini == 0 {
+			pipe_buf = "" : pipe_ln = ""
+			cmd = "cmd /c \""+codePath+"\" --install-extension vain0x.hsp3-analyzer-mini"
+			pipeexec pipe_buf, cmd, 0
+			do : wait 1 : pipeget pipe_ln : until stat==0
+		}
+		if hspPath != "" {
+			notesel noteText
+			noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+			CheckSettings_AnalyzerMini
+			if 0 {
+			#deffunc CheckSettings_AnalyzerMini
+			replaced = 0
+			dblBackSlash_path = hspPath
+			strrep dblBackSlash_path, "\\", "\\\\"
+			SettingsJson_Add noteText, "hsp3-analyzer-mini.hsp3-root", "\""+dblBackSlash_path+"\"" : replaced |= stat
+			return replaced
+			}
+			if stat : notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+			noteunsel
+		}
+		vscode_ext_AnalyzerMini = 1
+	}
+
+	// キーボードショートカット登録
+	insSeq = 39 : gosub *DRAW_INSTALL_LIST
+	if vscode_settings_shortcutkey != 1 {
+		LOG_Add "VSCode - キーボードショートカット登録"
+		exist dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\keybindings.json"
+		if strsize == -1 {
+			noteText = {"// 既定値を上書きするには、このファイル内にキー バインドを挿入しますauto[]\n[\n    {\n        "key": "f5",\n        "command": "language-hsp3.run",\n        "when": "editorLangId == 'hsp3'"\n    },\n    {\n        "key": "f1",\n        "command": "language-hsp3.helpman.search",\n        "when": "editorLangId == 'hsp3'"\n    }\n]"}
+			nkfcnv noteTextUTF8, noteText, "wS"
+			notesel noteTextUTF8
+			notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\keybindings.json"
+			noteunsel
+		}else {
+			notesel noteText
+			noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\keybindings.json"
+			replaced = 0
+			KeybindingsJson_Add noteText, "f5", "language-hsp3.run", "editorLangId == 'hsp3'"            : replaced |= stat
+			KeybindingsJson_Add noteText, "f1", "language-hsp3.helpman.search", "editorLangId == 'hsp3'" : replaced |= stat
+			if replaced : notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\keybindings.json"
+			noteunsel
+		}
+		vscode_settings_shortcutkey = 1
+	}
+
+//--------------------------------------
+// 関連付け
+//--------------------------------------
+	insSeq = 40 : gosub *DRAW_INSTALL_LIST
+	if hspPath != "" && hspforvscode_opt_assoc==1 && assoced_user == 0 && assoced_HspInVSCode == 0 {
+		insSeq = 41 : gosub *DRAW_INSTALL_LIST
+		LOG_Add "拡張子関連付け設定"
+		// 既に関連付けされているProgIdを取得
+		maeRegHsp = GetRegStrValue( HKEY_LOCAL_MACHINE, "SOFTWARE\\Classes\\.hsp" )
+		maeRegAs = GetRegStrValue( HKEY_LOCAL_MACHINE, "SOFTWARE\\Classes\\.hsp" )
+		// 関連付けを登録(assoc,ftype方式) 管理者として実行されている必要がある
+		SetRegStrValue HKEY_LOCAL_MACHINE, "SOFTWARE\\Classes\\.hsp", "", "HspInVSCode"
+		SetRegStrValue HKEY_LOCAL_MACHINE, "SOFTWARE\\Classes\\.as", "", "HspInVSCode"
+		SetRegStrValue HKEY_LOCAL_MACHINE, "SOFTWARE\\Classes\\HspInVSCode\\Shell\\Open\\Command", "", "\""+hspPath+"\\OpenHspInVSCode.exe\" \"%1\""
+		// 既に関連付けされていた場合に、保存しておいてアンインストール時に戻せるようにする。
+		if maeRegHsp != "" && maeRegHsp != "HspInVSCode" : SetRegStrValue HKEY_LOCAL_MACHINE, "SOFTWARE\\Classes\\HspInVSCode", "PreviousAssocHsp", maeRegHsp
+		if maeRegAs != "" && maeRegAs != "HspInVSCode" : SetRegStrValue HKEY_LOCAL_MACHINE, "SOFTWARE\\Classes\\HspInVSCode", "PreviousAssocAs", maeRegHsp
+
+		assoced_HspInVSCode = 1
+		LOG_Add "関連付け完了"
+	}
+
+//--------------------------------------
+// インストール完了
+//--------------------------------------
+	insSeq = 50 : gosub *DRAW_INSTALL_LIST
+	LOG_Add "セットアップ完了"
+	if hspPath != "" {
+		// 関連付け用実行ファイル(OpenHspInVSCode.exe)を生成
+		codeExePath = codePath
+		strrep codeExePath, "bin\\code", "Code.exe"
+		Create_OpenHspInVSCode_exe hspPath, codeExePath
+
+		// サンプルスクリプトを生成
+		script_sample = {"
+#\packopt name "実行ファイル"
+
+\tbutton gosub "ハロー！", *LABEL_HELLO
+\tstop
+
+*LABEL_HELLO
+\tmes "Hello, World !!"
+\treturn
+
+//
+//  VSCodeエディタ右上、タブ右横の「Run HSP program」ボタンを押してみよう！
+//  (「F5」キーでもＯＫ！)
+//
+//  「Alt」キーを長押しすると「Automatic exe file creation」に変化します。 
+//  このボタンを押すとスクリプトファイル(.hsp)と同じ場所に実行ファイル(.exe)が作成されます！
+//  （「Ctrl + F9」キーでもＯＫ！）
+//
+//  ★ スクリプトを編集した場合は保存してから実行してください。
+//
+//  button等のコマンドにキャレットを合わせて「F1」キーを押すと詳細なヘルプが確認できます！
+//
+//  ← 現在は「HSP3インストールフォルダ/sample/basic」フォルダを開いていますが、
+//    sampleフォルダにはまだまだ様々なサンプルが用意されています。
+//    basicフォルダ以外も、ぜひ色々と開いて試してみてください！
+//
+"}
+		// ShiftJISで開かれない恐れがあるときはUTF8でも注意文を書いておく
+		if vscode_settings_trust == 0 {
+			script_sample_plus = "VSCode初回起動時まだ日本語化されなかった場合はVSCodeを一度閉じてまた開きなおしてください。\n//"
+			nkfcnv script_sample_plus, script_sample_plus, "wS"
+			script_sample += {"
+//
+//  ↓文字エンコードがUTF8で開かれたとき用にUTF8でメッセージを書いてます。(文字化け気にしないでください。)
+//  "}+script_sample_plus
+		}
+		// サンプルスクリプト保存
+		PathIsDirectory hspPath+"\\sample\\basic"
+		if stat != 0 {
+			notesel script_sample
+			notesave hspPath+"\\sample\\basic\\HelloWorld_HspInVSCode.hsp"
+			noteunsel
+		}
+	}
+
+	// ちゃんと開く先のサンプルスクリプトが作られているか確認
+	exist hspPath+"\\sample\\basic\\HelloWorld_HspInVSCode.hsp"
+	if strsize != -1 {
+		exist hspPath+"\\OpenHspInVSCode.exe"
+		if strsize != -1 {
+			openableHspInVSCode = 1
+		}
+	}
+
+	// インストール完了後、VSCodeを起動
+	noteText = "インストールが完了しました。"
+	if openableHspInVSCode {
+		noteText += "\n\nサンプルスクリプトをVSCodeで開きます。"
+		if vscode_settings_trust == 0 : noteText += "\n\nVSCodeが起動したらフォルダを信頼するかどうかのダイアログが出ますが、\n「信頼する」ボタンを押してください。"
+	}
+	dialog noteText, 0, APP_NAME
+
+	// サンプルスクリプトが存在するのでVSCodeで開く
+	if openableHspInVSCode {
+		// VSCode初回起動 自動設定中... を表示
+		bgscr 3, 300, 100, 2, (ginfo_dispx-300)/2, (ginfo_dispy*90/100-100)/2
+		syscolor 4 : boxf : color 250,250,250 : boxf 4, 4, ginfo_sx-4, ginfo_sy-4 : color 20,20,20
+		font MSGOTHIC, 12, 1 : pos (ginfo_sx-180)/2, (ginfo_sy-12)/2 : mes "VSCode初回起動 自動設定中"
+		gsel 3, 2 : gsel 0
+		
+		// [hsp3]shiftjisでsettings.json上書きして、最終開いたら元に戻して再度上書きする（VSCodeの初回起動でfiles.autoGuessEncodingが機能しない問題を回避。元から[hsp3]shiftjisされてたらreplaced==0）
+		notesel noteText
+		noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+		noteText_ori = noteText
+		replaced = 0
+		if match(noteText, "\"files\\.autoGuessEncoding\"\\s*:") != "" {
+			SettingsJson_Add noteText, "files.autoGuessEncoding", "false" : replaced |= stat
+		}
+		if match(noteText, "\"\\[hsp3\\]\"\\s*:") == "" {
+			SettingsJson_Add noteText, "[hsp3]", "{ \"files.encoding\": \"shiftjis\" }" : replaced |= stat
+		}
+		if replaced : notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+		noteunsel
+		
+		// 元々VSCodeのCode/Userが作られていなかったならWelcomeされる(?)。 Welcomeがあるかないかで起動処理を変更
+		if haveCodeUser == 0 {
+			// VSCodeを2回起動
+			_dir_file = hspPath+"\\sample\\basic\\HelloWorld_HspInVSCode.hsp"
+			_dir_folder = hspPath+"\\sample\\basic"
+			pipe_buf = "" : pipe_ln = ""
+			cmd_vsc_open = "cmd /c \"\""+codePath+"\" \""+_dir_folder+"\" \""+_dir_file+"\""
+			pipeexec pipe_buf, cmd_vsc_open, 0
+			do : wait 1 : pipeget pipe_ln : until stat==0
+			// 一度メニューが表示されたら次回起動時に日本語化されるみたい(?)。VSCode起動->メニューが描画されるまで待って再起動したい。
+			repeat 20
+				wait 50  ; 10秒間はVSCodeウィンドウが開いたか確認
+				GetVSCodeWindowHandle  ; VSCodeのウィンドウハンドルを取得
+				vscodeHwnd = stat
+				if vscodeHwnd : break  ; VSCodeが開いた。
+			loop
+			// 起動状態監視開始。Welcomタブが表示される頃にはニューが描画されるはず
+			repeat 10
+				gsel 3 : mes ".",1 : gsel 0
+				pipe_buf = "" : pipe_ln = ""
+				cmd = "cmd /c \""+codePath+"\" -s"  ; code --status で起動状態を取得（1回に結構時間が掛かるから途中でも抜け出す）
+				pipe_ln_checking = 1
+				pipeexec pipe_buf, cmd, 0
+				do : wait 1 : pipeget pipe_ln : pipe_ln_checking = stat         ; pipe途中で抜けた場合どこかで最終まで確認すること (pipe_ln_checking)
+					if instr(pipe_ln, 0, "window [1] (Welcome") != -1 : _break  ; 途中でもdo-untilを抜け出す
+				until pipe_ln_checking==0
+				if instr(pipe_ln , 0, "window [1] (Welcome") != -1 : break  ; Welcomタブが表示された模様(?)。次へ
+				if instr(pipe_buf, 0, "window [1] (Welcome") != -1 : break  ;
+				wait 50
+			loop
+			
+		}else {
+			// VSCodeを2回起動
+			pipe_buf = "" : pipe_ln = ""
+			cmd = "cmd /c \""+codePath+"\""
+			pipeexec pipe_buf, cmd, 0
+			do : wait 1 : pipeget pipe_ln : until stat==0
+			// 一度メニューが表示されたら次回起動時に日本語化されるみたい(?)。VSCode起動->メニューが描画されるまで待って再起動したい。
+			repeat 20
+				wait 50  ; 10秒間はVSCodeウィンドウが開いたか確認
+				GetVSCodeWindowHandle  ; VSCodeのウィンドウハンドルを取得
+				vscodeHwnd = stat
+				if vscodeHwnd : wait 200 : break  ; VSCodeが開いて2秒待てばメニューが描画されるだろうか
+			loop
+			
+		}
+		// 1回目のVSCcode起動が完了したので、閉じてから再起動
+		if vscodeHwnd {
+			// VSCodeを閉じて一応2秒くらい待つ
+			sendmsg vscodeHwnd, 0x0010/*WM_CLOSE*/, 0, 0 : wait 200
+		}
+		if pipe_ln_checking {
+			// もし前回のpipeexecが残っているなら消費する
+			do : wait 1 : pipeget pipe_ln : until stat==0
+		}
+		if vscodeHwnd {
+			// ファイル,フォルダを指定してVSCode再起動
+			_dir_file = hspPath+"\\sample\\basic\\HelloWorld_HspInVSCode.hsp"
+			_dir_folder = hspPath+"\\sample\\basic"
+			pipe_buf = "" : pipe_ln = ""
+			cmd = "cmd /c \"\""+codePath+"\" \""+_dir_folder+"\" \""+_dir_file+"\""
+			pipeexec pipe_buf, cmd, 0
+			do : wait 1 : pipeget pipe_ln : until stat==0
+		}
+		//ここでもうVSCode初回起動 自動設定中...表示を消してしまう
+		gsel 3 : mes "OK" : wait 150 : gsel 3, -1 : gsel 0
+		
+		// [hsp3]shiftjisでsettings.jsonを上書きしていたら元に戻す
+		if replaced {
+			repeat 20
+				wait 50  ; 10秒間はVSCodeウィンドウが開いたか確認
+				GetVSCodeWindowHandle  ; VSCodeのウィンドウハンドルを取得
+				vscodeHwnd = stat
+				if vscodeHwnd : gsel 0,-1 : wait 500 : break  ; VSCodeが開いて5秒待ってから設定を上書き保存
+			loop
+			// 元のsettings.jsonを再度上書き保存
+			notesel noteText_ori
+			notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+			noteunsel
+		}
+		
+	}
+	goto *quit_
+}
+// 普通に完了すれば hspPath!="" && codePath!="" になるので、ここには来ない。
+insSeq = 100 : gosub *DRAW_INSTALL_LIST
+dialog "インストール処理は終了しましたが、なんらかの理由でインストールに失敗しました。\n\nインストーラー開発者にログ情報を伝え問題を報告してください。\n\n"+APP_DEVELOPER+"\n"+APP_CONTACT_MAIL, 1, APP_NAME
+stop
+//------------------------------------------------------------------------------
+// /インストール処理
+//==============================================================================
+
+//==============================================================================
+// 終了処理
+//------------------------------------------------------------------------------
+*quit
+	if wparam == 2 : gsel 2,-1 : EnableWindow hwnd_0,1 : gsel 0,1 : stop
+*quit_
+	oncmd 0
+	;gsel 0, -1
+	DeleteObject hBrush
+	end
+//------------------------------------------------------------------------------
+// /終了処理
+//==============================================================================
+
+
+/*==============================================================================
+// OpenHspInVSCode.exe スクリプト
+//------------------------------------------------------------------------------
+
+;# packopt name "OpenHspInVSCode"
+# packopt name "OHIVSCode"  ; 古い環境で実行ファイル化->packするとき文字数制限有り
+# packopt icon "ONICODE.ico"
+# packopt hide 1
+
+if dir_cmdline == "" : end
+_dir_file = dir_cmdline
+_dir_file = strtrim(_dir_file, 0, '\"')
+exist "OpenHspInVSCode.ini"
+if strsize == -1 : end
+notesel text
+noteload "OpenHspInVSCode.ini"
+noteget path, 0
+_dir_folder = getpath(_dir_file,32)
+_dir_folder = strtrim(_dir_folder, 2, '\\')
+exec "\""+path+"\" \""+_dir_folder+"\" \""+_dir_file+"\"", 2
+end
+
+//------------------------------------------------------------------------------
+// /OpenHspInVSCode.exe スクリプト
+//============================================================================*/
