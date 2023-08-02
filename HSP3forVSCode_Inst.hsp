@@ -290,8 +290,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #packopt manifest "manifest_h3fvsc.txt"  ; manifestが上手く適用されなかったらResourceHacker等で直接書き換えてください(hsp3ld.hrt)
 
 #define APP_NAME "HSP3 for VSCode インストーラー"
-#define APP_VERSION_STR "0.9"
-#define APP_VERSION_DOUBLE (0.9)
+#define APP_VERSION_STR "0.9.1"
+#define APP_VERSION_DOUBLE (0.91)
 #define APP_COPYRIGHT "Copyright(C) 2023 MIZUSHIKI"
 #define APP_DEVELOPER "MIZUSHIKI"
 #define APP_CONTACT_MAIL "suwa.mizushiki@gmail.com"
@@ -1888,15 +1888,6 @@ if codePath != "" {
 //    basicフォルダ以外も、ぜひ色々と開いて試してみてください！
 //
 "}
-		// ShiftJISで開かれない恐れがあるときはUTF8でも注意文を書いておく
-		if vscode_settings_trust == 0 {
-			script_sample_plus = "VSCode初回起動時まだ日本語化されなかった場合はVSCodeを一度閉じてまた開きなおしてください。\n//"
-			nkfcnv script_sample_plus, script_sample_plus, "wS"
-			script_sample += {"
-//
-//  ↓文字エンコードがUTF8で開かれたとき用にUTF8でメッセージを書いてます。(文字化け気にしないでください。)
-//  "}+script_sample_plus
-		}
 		// サンプルスクリプト保存
 		PathIsDirectory hspPath+"\\sample\\basic"
 		if stat != 0 {
