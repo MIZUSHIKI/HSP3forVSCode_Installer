@@ -290,8 +290,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #packopt manifest "manifest_h3fvsc.txt"  ; manifestが上手く適用されなかったらResourceHacker等で直接書き換えてください(hsp3ld.hrt)
 
 #define APP_NAME "HSP3 for VSCode インストーラー"
-#define APP_VERSION_STR "0.9.1"
-#define APP_VERSION_DOUBLE (0.91)
+#define APP_VERSION_STR "0.9.2"
+#define APP_VERSION_DOUBLE (0.92)
 #define APP_COPYRIGHT "Copyright(C) 2023 MIZUSHIKI"
 #define APP_DEVELOPER "MIZUSHIKI"
 #define APP_CONTACT_MAIL "suwa.mizushiki@gmail.com"
@@ -581,6 +581,83 @@ return
 	SendMsg htooltip, $0404/*TTM_ADDTOOL*/, 0, varptr(TOOLINFO)
 	return
 #global
+
+//--------------------------------------
+// タスクダイアログ
+//--------------------------------------
+#module mod_TaskDialog
+#uselib "Comctl32.dll"
+#func TaskDialogIndirect "TaskDialogIndirect" int,int,int,int
+#deffunc init@mod_TaskDialog
+	// 初期化。設定が必要な場合TaskDialog前に変数@mod_TaskDialogを直接書き換える
+	dwFlags = 0x0008/*TDF_ALLOW_DIALOG_CANCELLATION*/ | 0x0010/*TDF_USE_COMMAND_LINKS*/	| 0x0001/*TDF_ENABLE_HYPERLINKS*/
+	dwCommonButtons = 0
+	nDefaultButton = 0
+	cRadioButtons = 0
+	pRadioButtons = 0
+	nDefaultRadioButton = 0
+	pszVerificationText = 0
+	pszExpandedInformation = 0
+	pszExpandedControlText = 0
+	pszCollapsedControlText = 0
+	pfCallback = 0
+	lpCallbackData = 0
+	cxWidth = 0
+	return
+#deffunc TaskDialog str _titl, str _main, str _text, str _foot, str _item, int _icon_main, int _icon_foot
+	// 選択肢分解
+	item = _item
+	notesel item
+	maxlen = 0  ; 最大文字列長
+	repeat notemax
+		noteget temp, cnt : if strlen(temp) > maxlen : maxlen = strlen(temp)
+	loop
+	sdim itemsUNI, maxlen*2+2, notemax
+	dim pButtons, notemax*2
+	// 配列にユニコードで格納
+	repeat notemax
+		noteget temp, cnt : cnvstow itemsUNI(cnt), temp
+		pButtons(cnt*2) = 101 + cnt, varptr(itemsUNI(cnt))
+	loop
+
+	// 各テキストをユニコード化
+	if _titl != "" : sdim titlUNI, strlen(_titl)*2+2 : cnvstow titlUNI, _titl : ptitlUNI = varptr(titlUNI) : else : ptitlUNI = 0
+	if _main != "" : sdim mainUNI, strlen(_main)*2+2 : cnvstow mainUNI, _main : pmainUNI = varptr(mainUNI) : else : pmainUNI = 0
+	if _text != "" : sdim textUNI, strlen(_text)*2+2 : cnvstow textUNI, _text : ptextUNI = varptr(textUNI) : else : ptextUNI = 0
+	if _foot != "" : sdim footUNI, strlen(_foot)*2+2 : cnvstow footUNI, _foot : pfootUNI = varptr(footUNI) : else : pfootUNI = 0
+	dim TASKDIALOGCONFIG, 24
+	TASKDIALOGCONFIG.0  = 96
+	TASKDIALOGCONFIG.1  = hWnd
+	TASKDIALOGCONFIG.2  = hInstance
+	TASKDIALOGCONFIG.3  = dwFlags
+	TASKDIALOGCONFIG.4  = dwCommonButtons
+	TASKDIALOGCONFIG.5  = ptitlUNI
+	TASKDIALOGCONFIG.6  = _icon_main
+	TASKDIALOGCONFIG.7  = pmainUNI
+	TASKDIALOGCONFIG.8  = ptextUNI
+	TASKDIALOGCONFIG.9  = notemax
+	TASKDIALOGCONFIG.10 = varptr(pButtons)
+	TASKDIALOGCONFIG.11 = nDefaultButton
+	TASKDIALOGCONFIG.12 = cRadioButtons
+	TASKDIALOGCONFIG.13 = pRadioButtons
+	TASKDIALOGCONFIG.14 = nDefaultRadioButton
+	TASKDIALOGCONFIG.15 = pszVerificationText
+	TASKDIALOGCONFIG.16 = pszExpandedInformation
+	TASKDIALOGCONFIG.17 = pszExpandedControlText
+	TASKDIALOGCONFIG.18 = pszCollapsedControlText
+	TASKDIALOGCONFIG.19 = _icon_foot
+	TASKDIALOGCONFIG.20 = pfootUNI
+	TASKDIALOGCONFIG.21 = pfCallback
+	TASKDIALOGCONFIG.22 = lpCallbackData
+	TASKDIALOGCONFIG.23 = cxWidth
+	noteunsel
+	pnButton = 0 : pnRadioButton = 0 : pfVerificationFlagChecked = 0
+	TaskDialogIndirect varptr(TASKDIALOGCONFIG), varptr(pnButton), varptr(pnRadioButton), varptr(pfVerificationFlagChecked)
+	init@mod_TaskDialog
+	if stat : return stat  ; エラー番号
+	return pnButton  ; 選択ID番号
+#global
+init@mod_TaskDialog
 
 //--------------------------------------
 // utf8で使えるreplace
@@ -990,6 +1067,9 @@ init@MyRoutine
 		if instr(pipe_buf,0,"MS-CEINTL.vscode-language-pack-ja") != -1 : vscode_ext_JapaneseLanguagePack = 1
 		if instr(pipe_buf,0,"honobonosun.language-hsp3") != -1 : vscode_ext_LanguageHsp3 = 1
 		if instr(pipe_buf,0,"vain0x.hsp3-analyzer-mini") != -1 : vscode_ext_AnalyzerMini = 1
+		notesel pipe_buf
+		if notemax != 3 || vscode_ext_JapaneseLanguagePack == 0 || vscode_ext_LanguageHsp3 == 0 || vscode_ext_AnalyzerMini == 0 : vscode_master = 1  ; 既にVSCodeを使ってた人判定
+		noteunsel
 	}
 	// ショートカットキー設定状況を確認
 	exist dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\keybindings.json"
@@ -1033,8 +1113,8 @@ init@MyRoutine
 	if hspPath != "" : input_HspInstallFolder = "インストール済み -> "+hspPath
 	vscode_ext_notUseUtf8 = 1
 	vscode_opt_addpath = 1
-	vscode_opt_insertSpaces = 1
-	vscode_opt_trust = 1
+	vscode_opt_insertSpaces = 1 : if vscode_master && (vscode_settings_insertSpaces==0) : vscode_opt_insertSpaces = 0
+	vscode_opt_trust = 1 : if vscode_master && (vscode_settings_trust==0) : vscode_opt_trust = 0
 	hspforvscode_opt_assoc = 1
 
 //--------------------------------------
@@ -1196,12 +1276,16 @@ if 0 {
 	button_sansyo_id = stat
 	objids(length.objids) = stat
 	SetTooltip objinfo_hwnd(stat), "HSP3をインストールするフォルダを選択\nインストール済みなのに自動取得されなかった場合はHSP3インストールフォルダを選択"
-	objsize 165,18, 18
+	objsize 175,18, 18
 	pos 335, ginfo_cy-1
-	chkbox "UTF8文字コードは扱わない", vscode_ext_notUseUtf8
+	tempText = "UTF8文字コードは扱わない"
+	if vscode_master && vscode_settings_autoGuessEncoding : tempText += " (！)"
+	chkbox tempText, vscode_ext_notUseUtf8
 	vscode_ext_notUseUtf8_hwnd = objinfo_hwnd(stat)
 	objids(length.objids) = stat
-	SetTooltip vscode_ext_notUseUtf8_hwnd, "Shift-JIS固定でしかHSP3スクリプトを扱わない。\nこれにより文字コードの誤判定に煩わされないようになります。\n（文字コードについて詳しくない方はチェック推奨）"
+	tempText = "Shift-JIS固定でしかHSP3スクリプトを扱わない。\nこれにより文字コードの誤判定に煩わされないようになります。\n（文字コードについて詳しくない方はチェック推奨）"
+	if vscode_master && vscode_settings_autoGuessEncoding : tempText += "\n----------------------------------------------------------\n(！) VSCodeで\"files.autoGuessEncoding\"を検出しました。\nその設定があるとここをチェックしてもShift-JISで必ず開くことは出来ず文字化けする場合があります。\n可能であればVSCode設定の見直しも検討ください。"
+	SetTooltip vscode_ext_notUseUtf8_hwnd, tempText
 	
 	pos 320, ginfo_cy+20
 	mes "VSCode使用許諾"
@@ -1211,7 +1295,7 @@ if 0 {
 	sendmsg hStatic_licence, $30, hFont  ; ハイパーテキスト風に
 	if codePath != "" : objenable objids(length.objids-1), 0
 
-	pos 320, ginfo_cy+25
+	pos 320, ginfo_cy+20
 	mes "VSCodeオプション"
 	objsize 300, 25, 25
 	chkbox "デスクトップ上にアイコンを作成する", vscode_opt_icon : objids(length.objids) = stat : SetTooltip objinfo_hwnd(stat), "VSCodeインストーラー設定"
@@ -1222,12 +1306,38 @@ if 0 {
 	chkbox "サポートされているファイルの種類のエディターとして\nCodeを登録する", vscode_opt_associate   : cmd += ",associatewithfiles" : objids(length.objids) = stat : SetTooltip objinfo_hwnd(stat), "VSCodeインストーラー設定" : GetWindowLong objinfo_hwnd(objids(length.objids-1)),-16 : SetWindowLong objinfo_hwnd(objids(length.objids-1)), -16, stat | $2000
 	chkbox "PATHへの追加（再起動後に使用可能）\n/コマンドプロンプトでcodeコマンドが使えるようになる", vscode_opt_addpath : objids(length.objids) = stat : SetTooltip objinfo_hwnd(stat), "VSCodeインストーラー設定" : GetWindowLong objinfo_hwnd(objids(length.objids-1)),-16 : SetWindowLong objinfo_hwnd(objids(length.objids-1)), -16, stat | $2000
 	if codePath != "" : repeat 5,1 : objenable objids(length.objids-cnt), 0 : loop
-	objsize 300, 25, 25 : pos ,ginfo_cy+2
-	chkbox "規定のインデントをスペースではなくタブにする", vscode_opt_insertSpaces : vscode_opt_insertSpaces_hwnd = objinfo_hwnd(stat) : objids(length.objids) = stat : SetTooltip objinfo_hwnd(stat), "VSCodeユーザー設定"
-	chkbox "制限モードを使わない（ワークスペースを常に信頼）", vscode_opt_trust : vscode_opt_trust_hwnd = objinfo_hwnd(stat) : objids(length.objids) = stat : SetTooltip objinfo_hwnd(stat), "VSCodeユーザー設定"
-	
+	objsize 260, 25, 25 : pos ,ginfo_cy+2
+	chkbox "規定のインデントをスペースではなくタブにする", vscode_opt_insertSpaces : vscode_opt_insertSpaces_hwnd = objinfo_hwnd(stat) : objids(length.objids) = stat
+	tempText = "VSCodeユーザー設定"
+	if vscode_master && (vscode_settings_insertSpaces==0) : tempText += "\n----------------------\n(！) VSCodeを検出。デフォルトの値をチェック無しに変更しました。"
+	SetTooltip objinfo_hwnd(stat), tempText
+	cy = ginfo_cy
+	chkbox "制限モードを使わない（ワークスペースを常に信頼）", vscode_opt_trust : vscode_opt_trust_hwnd = objinfo_hwnd(stat) : objids(length.objids) = stat
+	tempText = "VSCodeユーザー設定"
+	if vscode_master && (vscode_settings_trust==0) : tempText += "\n----------------------\n(！) VSCodeを検出。デフォルトの値をチェック無しに変更しました。\n制限モードの解説を確認し設定をどうするか検討してください"
+	SetTooltip objinfo_hwnd(stat), tempText
+	objsize 30, 20, 25 : pos ginfo_cx+260, cy+2
+	button gosub "？", AnonLabel {
+		expandFoot_text = {"・ VSCodeで初めてのフォルダを開くとき「信頼するかどうか」のダイアログが出ます。
+・ 「UTF8文字コードは扱わない」チェックを外してHSP3でUTF8も使おうと思っている設定の場合、この「信頼するかどうか」ダイアログが出たときは文字コードの判別が行われず、もしShift-JISのスクリプトを開いたとしてもUTF8だと誤認され必ず文字化けが発生します。
+・ 一度「信頼」すれば以後同じフォルダでダイアログは出ず、Shift-JISのスクリプトでも文字化けは発生しません。
+・ 「信頼するかどうか」ダイアログが出て文字化けが発生した場合は、一度VSCodeを閉じて再度開き直してください。"}
+		sdim expandFoot_textUNI, strlen(expandFoot_text)*2+2 : cnvstow expandFoot_textUNI, expandFoot_text
+		pszExpandedInformation@mod_TaskDialog = varptr(expandFoot_textUNI)
+		expandFoot_title = "制限モードを使うことでの影響"
+		sdim expandFoot_titleUNI, strlen(expandFoot_title)*2+2 : cnvstow expandFoot_titleUNI, expandFoot_title
+		pszCollapsedControlText@mod_TaskDialog = varptr(expandFoot_titleUNI)
+		dwFlags@mod_TaskDialog |= 0x0040/*TDF_EXPAND_FOOTER_AREA*/
+		dwCommonButtons@mod_TaskDialog = 1
+		cxWidth@mod_TaskDialog = 320
+		TaskDialog "HSP3forVSCodeインストーラー - VSCodeオプション", "制限モードとは", "・ 悪意あるコードの実行を防ぐためVSCodeに導入された機能です。\n・ 今後 VSCodeで機能拡張を増やしていく可能性のある場合はチェックを外し制限モードを使用することを推奨します。", "", "", 0xFFFD/*TD_INFORMATION_ICON*/, 0
+		return
+	}
+	objids(length.objids) = stat
+	SetTooltip objinfo_hwnd(stat), "制限モードとは"
+
 	objsize 195, 24, 12
-	pos 320, ginfo_cy+20
+	pos 320, cy+45
 	mes "関連付け" : cy = ginfo_cy
 	chkbox " . hsp . as 拡張子の関連付けを行う", hspforvscode_opt_assoc : hspforvscode_opt_assoc_hwnd = objinfo_hwnd(stat) : objids(length.objids) = stat
 	SetTooltip objinfo_hwnd(stat), "関連付けの解除方法：\nインストール終了後、再度このインストーラーを起動すると関連付けを解除するボタンが表示されます。"
@@ -1367,6 +1477,7 @@ if 0 {
 		PathIsDirectory folderPath_unzipHsp
 		if stat == 0 : dialog "HSP3のインストール先が正しくありません。",1,APP_NAME : stop
 	}
+	oncmd 0  ; 不要なジャンプを防ぐ
 	// 右側の文字を全部消す
 	color 250,250,250 : boxf 292, 0, ginfo_sx, ginfo_sy-60
 	// すべてのオブジェクトを非表示にする
@@ -1592,12 +1703,14 @@ if codePath != "" {
 				notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
 				noteunsel
 			}else {
-				notesel noteText
-				noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
-				replaced = 0
-				SettingsJson_Add noteText, "files.autoGuessEncoding", "false" : replaced |= stat
-				if replaced : notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
-				noteunsel
+				if vscode_master == 0 {  ; 既にVSCodeを使ってた人には"files.autoGuessEncoding":trueがあっても解除しない
+					notesel noteText
+					noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+					replaced = 0
+					SettingsJson_Add noteText, "files.autoGuessEncoding", "false" : replaced |= stat
+					if replaced : notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+					noteunsel
+				}
 			}
 			vscode_settings_autoGuessEncoding = 0
 		}

@@ -1,14 +1,14 @@
 ; Let's HSPIC! バージョン情報用ファイルのサンプル
 ; 行の先頭部分に｢;｣(セミコロン)を付けると、その行はスキップします。
-_FILEVERSION=0.9.1.0
-_PRODUCTVERSION=0.9.1.0
+_FILEVERSION=0.9.2.0
+_PRODUCTVERSION=0.9.2.0
 ;↑全て 0.0.0.0 ↓全て0.0(末尾省略)
 ;Comments=HSP3forVSCode_Inst
 CompanyName=MIZUSHIKI
 FileDescription=HSP3forVSCodeインストーラー
-FileVersion=0.9.1
+FileVersion=0.9.2
 InternalName=HSP3forVSCode_Inst
 LegalCopyright=Copyright (C) 2023 MIZUSHIKI
 OriginalFilename=HSP3forVSCode_Inst.exe
 ProductName=HSP3forVSCodeインストーラー
-ProductVersion=0.9.1
+ProductVersion=0.9.2
