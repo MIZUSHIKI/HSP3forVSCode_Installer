@@ -290,8 +290,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #packopt manifest "manifest_h3fvsc.txt"  ; manifestが上手く適用されなかったらResourceHacker等で直接書き換えてください(hsp3ld.hrt)
 
 #define APP_NAME "HSP3 for VSCode インストーラー"
-#define APP_VERSION_STR "0.9.2"
-#define APP_VERSION_DOUBLE (0.92)
+#define APP_VERSION_STR "0.9.3"
+#define APP_VERSION_DOUBLE (0.93)
 #define APP_COPYRIGHT "Copyright(C) 2023 MIZUSHIKI"
 #define APP_DEVELOPER "MIZUSHIKI"
 #define APP_CONTACT_MAIL "suwa.mizushiki@gmail.com"
@@ -956,6 +956,15 @@ init@MyRoutine
 	folderPath_downloads = GetKnownFolderPath("{374DE290-123F-4565-9164-39C4925E467B}")  ; ダウンロードフォルダ
 	PathIsDirectory folderPath_downloads
 	if stat == 0 : folderPath_downloads = dirinfo(DIRINFO_LOCAL_APPDATA) + "\\Temp"  ; ユーザー/AppData/Local/Tempフォルダ
+	psVersion = 0.0
+	if IsWin10orOver() == 0 {
+		// Windows10より低いときはPowerShellのバージョンを確認する
+		cmd = "cmd /c powershell ''+$PSVersionTable.PSVersion.major+'.'+$PSVersionTable.PSVersion.minor"
+		pipe_buf = "" : pipe_ln = ""
+		pipeexec pipe_buf, cmd, 0
+		do : wait 1 : pipeget pipe_ln : until stat==0||(int(pipe_buf)!=0)  ; Windows7 PowerShell 2.0 ではいつまでたってもpipeが終了しないので
+		psVersion = double(pipe_buf)
+	}
 	
 	// 定数
 	WORD_LF = "a" : poke WORD_LF, 0, $0a
@@ -1385,7 +1394,13 @@ if 0 {
 	line 0, cy, ginfo_sx, cy
 	line 290, 10, 290, cy-10
 	pos 410, cy+15
-	objsize 100, 24, 35 : button gosub "インストール", AnonLabel { dialog "セットアップ作業を行います。",2,"セットアップ開始" :if(stat==6){goto *install} : return }
+	objsize 100, 24, 35 : button goto "インストール", AnonLabel {
+		tempText = "セットアップ作業を行います。"
+		if IsWin7orOver() == 1 && IsWin8_1orOver() == 0 : tempText += "\n\n----------\nWindows7,8 ではIEオプションのセキュリティ「TLS1.2を使用する」を設定してください。\n\n【手順】\n1. InternetExplorerを開く\n2. メニューバーの「ツール」を選択\n3. 「インターネットオプション」を選択\n4. タブの「詳細設定」を選択\n5. セキュリティの「TLS1.2の使用」にチェックを入れる"
+		dialog tempText,2,"セットアップ開始"
+		if stat==6 : goto *install
+		stop
+	}
 	objids(length.objids) = stat : button_install_id = stat
 	pos 520, cy+15
 	objsize 100, 24, 35 : button gosub "キャンセル", AnonLabel { dialog "セットアップ作業は完了していません。\n\nセットアップを終了しますか？",2,"セットアップ終了" :if(stat==6){goto *quit_} : return }
@@ -1466,6 +1481,11 @@ if 0 {
 // インストール処理
 //------------------------------------------------------------------------------
 *install
+//--------------------------------------
+// インストール条件の確認
+//--------------------------------------
+	if IsWin7orOver() == 0 : dialog "VSCodeの対応OSは Windows7以上 です。",1,APP_NAME : stop
+	if psVersion != 0.0 && psVersion < 5.0 : dialog "PowerShell 5.0 以上の環境が必要です。\n-----\ninstalled version :  "+strf("%.1f",psVersion),1,APP_NAME : stop
 //--------------------------------------
 // インストール準備
 //--------------------------------------
@@ -1675,9 +1695,9 @@ if codePath != "" {
 			sendmsg vscodeHwnd, 0x0010/*WM_CLOSE*/, 0, 0  ; VSCodeを閉じる
 		}
 		if haveSettings {
-			LOG_Add "VSCode - 定ファイル作成完了"
+			LOG_Add "VSCode - 設定ファイル作成完了"
 		}else {
-			LOG_Add "VSCode - 定ファイル作成失敗"
+			LOG_Add "VSCode - 設定ファイル作成失敗"
 		}
 	}
 }
