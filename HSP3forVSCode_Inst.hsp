@@ -290,8 +290,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #packopt manifest "manifest_h3fvsc.txt"  ; manifestが上手く適用されなかったらResourceHacker等で直接書き換えてください(hsp3ld.hrt)
 
 #define APP_NAME "HSP3 for VSCode インストーラー"
-#define APP_VERSION_STR "0.9.3"
-#define APP_VERSION_DOUBLE (0.93)
+#define APP_VERSION_STR "0.9.3.1"
+#define APP_VERSION_DOUBLE (0.931)
 #define APP_COPYRIGHT "Copyright(C) 2023 MIZUSHIKI"
 #define APP_DEVELOPER "MIZUSHIKI"
 #define APP_CONTACT_MAIL "suwa.mizushiki@gmail.com"
@@ -953,6 +953,12 @@ init@MyRoutine
 	// 変数
 	sdim pipe_ln, 4096
 	sdim pipe_buf, 64000
+	portableZipPath = ""
+	settingsJsonPath = dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+	keybindingsJsonPath = dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\keybindings.json"
+	argvJsonPath = dirinfo(DIRINFO_PROFILE)+"\\.vscode\\argv.json"
+	codeUserPath = dirinfo(DIRINFO_APPDATA)+"\\Code\\User"
+	serviceWorkerPath = dirinfo(DIRINFO_APPDATA)+"\\Code\\Service Worker"
 	folderPath_downloads = GetKnownFolderPath("{374DE290-123F-4565-9164-39C4925E467B}")  ; ダウンロードフォルダ
 	PathIsDirectory folderPath_downloads
 	if stat == 0 : folderPath_downloads = dirinfo(DIRINFO_LOCAL_APPDATA) + "\\Temp"  ; ユーザー/AppData/Local/Tempフォルダ
@@ -1036,30 +1042,57 @@ init@MyRoutine
 //--------------------------------------
 // vscodeインストール状況確認
 //--------------------------------------
+	codePath = ""
+	// ポータブルzip版を考慮
+	exist dir_cur+"\\bin\\code"
+	if strsize != -1 : codePath = dir_cur+"\\bin\\code" : portableZipPath = dir_cur
+	if codePath == "" {
+		dirlist dList, "*", 5
+		notesel dList
+		repeat notemax
+			noteget temp, cnt
+			exist dir_cur+"\\"+temp+"\\bin\\code"
+			if strsize != -1 : codePath = dir_cur+"\\"+temp+"\\bin\\code" : portableZipPath = dir_cur+"\\"+temp : break
+		loop
+		noteunsel
+	}
+	if codePath != "" {
+		// ポータブルzip版。dataフォルダ無ければ作る
+		PathIsDirectory portableZipPath+"\\data"
+		if stat == 0 : dirCur = dir_cur : chdir portableZipPath : mkdir "data" : chdir dirCur
+		// 設定ファイルのパスを修正
+		settingsJsonPath = portableZipPath+"\\data\\user-data\\User\\settings.json"
+		keybindingsJsonPath = portableZipPath+"\\data\\user-data\\User\\keybindings.json"
+		argvJsonPath = portableZipPath+"\\data\\argv.json"
+		codeUserPath = portableZipPath+"\\data\\user-data\\User"
+		serviceWorkerPath = portableZipPath+"\\data\\user-data\\Service Worker"
+	}
 	// codeコマンドが登録されていたらそこからパスを取得
-	pipe_buf = "" : pipe_ln = ""
-	cmd = "cmd /c where code"
-	pipeexec pipe_buf, cmd, 0
-	do : wait 1 : pipeget pipe_ln : until stat==0
-	getstr codePath, pipe_buf, 0
-	// whereからのパスにcodeがいるか確認
-	exist codePath
-	if strsize == -1 {
-		// whereからは見つけられなかったら通常インストール先を確認する
-		codePath = dirinfo(DIRINFO_LOCAL_APPDATA)+"\\Programs\\Microsoft VS Code\\bin\\code"
+	if codePath == "" {
 		pipe_buf = "" : pipe_ln = ""
-		cmd = "cmd /c \""+codePath+"\" -h"
+		cmd = "cmd /c where code"
 		pipeexec pipe_buf, cmd, 0
 		do : wait 1 : pipeget pipe_ln : until stat==0
-		if strmid(pipe_buf, 0, strlen("Visual Studio Code")) != "Visual Studio Code" : codePath = ""
+		getstr codePath, pipe_buf, 0
+		// whereからのパスにcodeがいるか確認
+		exist codePath
+		if strsize == -1 {
+			// whereからは見つけられなかったら通常インストール先を確認する
+			codePath = dirinfo(DIRINFO_LOCAL_APPDATA)+"\\Programs\\Microsoft VS Code\\bin\\code"
+			pipe_buf = "" : pipe_ln = ""
+			cmd = "cmd /c \""+codePath+"\" -h"
+			pipeexec pipe_buf, cmd, 0
+			do : wait 1 : pipeget pipe_ln : until stat==0
+			if strmid(pipe_buf, 0, strlen("Visual Studio Code")) != "Visual Studio Code" : codePath = ""
+		}
 	}
 	;logmes "VSCodePath="+codePath
 	
 	// Shif-JISファイル文字化け対策設定の状況を確認
-	exist dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+	exist settingsJsonPath
 	if strsize != -1 {
 		notesel noteText
-		noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+		noteload settingsJsonPath
 		noteunsel
 		if match(noteText,"\"files.autoGuessEncoding\"\\s*:\\s*true") != "" : vscode_settings_autoGuessEncoding = 1
 		if match(noteText, "\"\\[hsp3\\]\"\\s*:") != "" : vscode_settings_filesEncodingShiftjis = 1
@@ -1078,13 +1111,14 @@ init@MyRoutine
 		if instr(pipe_buf,0,"vain0x.hsp3-analyzer-mini") != -1 : vscode_ext_AnalyzerMini = 1
 		notesel pipe_buf
 		if notemax != 3 || vscode_ext_JapaneseLanguagePack == 0 || vscode_ext_LanguageHsp3 == 0 || vscode_ext_AnalyzerMini == 0 : vscode_master = 1  ; 既にVSCodeを使ってた人判定
+		if portableZipPath != "" && notemax == 0 : vscode_master = 0
 		noteunsel
 	}
 	// ショートカットキー設定状況を確認
-	exist dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\keybindings.json"
+	exist keybindingsJsonPath
 	if strsize != -1 {
 		notesel noteText
-		noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\keybindings.json"
+		noteload keybindingsJsonPath
 		noteunsel
 		vscode_settings_shortcutkey = 0
 		repeat 1
@@ -1124,7 +1158,7 @@ init@MyRoutine
 	vscode_opt_addpath = 1
 	vscode_opt_insertSpaces = 1 : if vscode_master && (vscode_settings_insertSpaces==0) : vscode_opt_insertSpaces = 0
 	vscode_opt_trust = 1 : if vscode_master && (vscode_settings_trust==0) : vscode_opt_trust = 0
-	hspforvscode_opt_assoc = 1
+	hspforvscode_opt_assoc = 1 : if portableZipPath != "" : hspforvscode_opt_assoc = 0
 
 //--------------------------------------
 // 設定
@@ -1261,7 +1295,7 @@ if 0 {
 			vscode_ext_LanguageHsp3 = 2
 			if hspPath != "" {
 				notesel noteText
-				noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				noteload settingsJsonPath
 				noteunsel
 				CheckSettings_LanguageHsp3
 				if stat == 0 : vscode_ext_LanguageHsp3 = 1
@@ -1271,7 +1305,7 @@ if 0 {
 			vscode_ext_AnalyzerMini = 2
 			if hspPath != "" {
 				notesel noteText
-				noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				noteload settingsJsonPath
 				noteunsel
 				CheckSettings_AnalyzerMini
 				if stat == 0 : vscode_ext_AnalyzerMini = 1
@@ -1305,7 +1339,8 @@ if 0 {
 	if codePath != "" : objenable objids(length.objids-1), 0
 
 	pos 320, ginfo_cy+20
-	mes "VSCodeオプション"
+	tempText = "" : if portableZipPath != "" : tempText = " (portable zip)"
+	mes "VSCodeオプション" + tempText
 	objsize 300, 25, 25
 	chkbox "デスクトップ上にアイコンを作成する", vscode_opt_icon : objids(length.objids) = stat : SetTooltip objinfo_hwnd(stat), "VSCodeインストーラー設定"
 	objsize 300, 30, 31
@@ -1670,8 +1705,9 @@ if codePath == "" {
 insSeq = 32 : gosub *DRAW_INSTALL_LIST
 if codePath != "" {
 	haveSettings = 1
-	exist dirinfo(DIRINFO_PROFILE)+"\\.vscode\\argv.json" : if strsize == -1 : haveSettings = 0
-	PathIsDirectory dirinfo(DIRINFO_APPDATA)+"\\Code\\User" : if stat == 0 : haveSettings = 0 : else : haveCodeUser = 1
+	exist argvJsonPath : if strsize == -1 : haveSettings = 0
+	PathIsDirectory codeUserPath : if stat == 0 : haveSettings = 0 : else : haveCodeUser = 1
+	if portableZipPath != "" : PathIsDirectory serviceWorkerPath : if stat == 0 : firstPortableZip = 1
 	if haveSettings == 0 {
 		LOG_Temp "VSCode 設定ファイル作成中..."
 		cmd = "cmd /c \""+codePath+"\""
@@ -1687,8 +1723,8 @@ if codePath != "" {
 			repeat 100
 				wait 10  ; 本当に作られたか10秒間は再確認
 				haveSettings = 1
-				exist dirinfo(DIRINFO_PROFILE)+"\\.vscode\\argv.json" : if strsize == -1 : haveSettings = 0
-				PathIsDirectory dirinfo(DIRINFO_APPDATA)+"\\Code\\User" : if stat == 0 : haveSettings = 0
+				exist argvJsonPath : if strsize == -1 : haveSettings = 0
+				PathIsDirectory codeUserPath : if stat == 0 : haveSettings = 0
 				if haveSettings : break
 			loop
 			if haveSettings == 0 : codePath = ""  ; なんか上手く作られなかったら処理中断
@@ -1716,37 +1752,37 @@ if codePath != "" {
 	if vscode_ext_notUseUtf8 {
 		if vscode_settings_autoGuessEncoding == 1 || vscode_settings_filesEncodingShiftjis == 0 : LOG_Add "VSCode - 文字化け対策設定"
 		if vscode_settings_autoGuessEncoding == 1 {
-			exist dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+			exist settingsJsonPath
 			if strsize == -1 {
 				noteText = "{\n    \"files.autoGuessEncoding\": false\n}"
 				notesel noteText
-				notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				notesave settingsJsonPath
 				noteunsel
 			}else {
 				if vscode_master == 0 {  ; 既にVSCodeを使ってた人には"files.autoGuessEncoding":trueがあっても解除しない
 					notesel noteText
-					noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+					noteload settingsJsonPath
 					replaced = 0
 					SettingsJson_Add noteText, "files.autoGuessEncoding", "false" : replaced |= stat
-					if replaced : notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+					if replaced : notesave settingsJsonPath
 					noteunsel
 				}
 			}
 			vscode_settings_autoGuessEncoding = 0
 		}
 		if vscode_settings_filesEncodingShiftjis == 0 {
-			exist dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+			exist settingsJsonPath
 			if strsize == -1 {
 				noteText = "{\n    \"[hsp3]\": { \"files.encoding\": \"shiftjis\" }\n}"
 				notesel noteText
-				notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				notesave settingsJsonPath
 				noteunsel
 			}else {
 				notesel noteText
-				noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				noteload settingsJsonPath
 				replaced = 0
 				SettingsJson_Add noteText, "[hsp3]", "{ \"files.encoding\": \"shiftjis\" }" : replaced |= stat
-				if replaced : notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				if replaced : notesave settingsJsonPath
 				noteunsel
 			}
 			vscode_settings_filesEncodingShiftjis = 1
@@ -1754,29 +1790,29 @@ if codePath != "" {
 	}else {
 		if vscode_settings_autoGuessEncoding == 0 || vscode_settings_filesEncodingShiftjis == 1 : LOG_Add "VSCode - 文字化け対策設定"
 		if vscode_settings_filesEncodingShiftjis == 1 {
-			exist dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+			exist settingsJsonPath
 			if strsize != -1 {
 				notesel noteText
-				noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				noteload settingsJsonPath
 				replaced = 0
 				SettingsJson_Delete noteText, "[hsp3]" : replaced |= stat
-				if replaced : notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				if replaced : notesave settingsJsonPath
 				noteunsel
 			}
 		}
 		if vscode_settings_autoGuessEncoding == 0 {
-			exist dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+			exist settingsJsonPath
 			if strsize == -1 {
 				noteText = "{\n    \"files.autoGuessEncoding\": true\n}"
 				notesel noteText
-				notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				notesave settingsJsonPath
 				noteunsel
 			}else {
 				notesel noteText
-				noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				noteload settingsJsonPath
 				replaced = 0
 				SettingsJson_Add noteText, "files.autoGuessEncoding", "true" : replaced |= stat
-				if replaced : notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				if replaced : notesave settingsJsonPath
 				noteunsel
 			}
 			vscode_settings_autoGuessEncoding = 1
@@ -1787,13 +1823,13 @@ if codePath != "" {
 	if vscode_settings_insertSpaces == 1 {
 		if vscode_opt_insertSpaces == 0 {
 			LOG_Add "VSCode - インデントタブ設定"
-			exist dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+			exist settingsJsonPath
 			if strsize != -1 {
 				notesel noteText
-				noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				noteload settingsJsonPath
 				replaced = 0
 				SettingsJson_Add noteText, "editor.insertSpaces", "true" : replaced |= stat
-				if replaced : notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				if replaced : notesave settingsJsonPath
 				noteunsel
 			}
 			vscode_settings_insertSpaces = 0
@@ -1801,18 +1837,18 @@ if codePath != "" {
 	}else {
 		if vscode_opt_insertSpaces == 1 {
 			LOG_Add "VSCode - インデントタブ設定"
-			exist dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+			exist settingsJsonPath
 			if strsize == -1 {
 				noteText = "{\n    \"editor.insertSpaces\": false\n}"
 				notesel noteText
-				notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				notesave settingsJsonPath
 				noteunsel
 			}else {
 				notesel noteText
-				noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				noteload settingsJsonPath
 				replaced = 0
 				SettingsJson_Add noteText, "editor.insertSpaces", "false" : replaced |= stat
-				if replaced : notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				if replaced : notesave settingsJsonPath
 				noteunsel
 			}
 			vscode_settings_insertSpaces = 1
@@ -1823,13 +1859,13 @@ if codePath != "" {
 	if vscode_settings_trust == 1 {
 		if vscode_opt_trust == 0 {
 			LOG_Add "VSCode - 制限モード無効設定"
-			exist dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+			exist settingsJsonPath
 			if strsize != -1 {
 				notesel noteText
-				noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				noteload settingsJsonPath
 				replaced = 0
 				SettingsJson_Add noteText, "security.workspace.trust.enabled", "true" : replaced |= stat
-				if replaced : notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				if replaced : notesave settingsJsonPath
 				noteunsel
 			}
 			vscode_settings_trust = 0
@@ -1837,18 +1873,18 @@ if codePath != "" {
 	}else {
 		if vscode_opt_trust == 1 {
 			LOG_Add "VSCode - 制限モード無効設定"
-			exist dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+			exist settingsJsonPath
 			if strsize == -1 {
 				noteText = "{\n    \"security.workspace.trust.enabled\": false\n}"
 				notesel noteText
-				notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				notesave settingsJsonPath
 				noteunsel
 			}else {
 				notesel noteText
-				noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				noteload settingsJsonPath
 				replaced = 0
 				SettingsJson_Add noteText, "security.workspace.trust.enabled", "false" : replaced |= stat
-				if replaced : notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+				if replaced : notesave settingsJsonPath
 				noteunsel
 			}
 			vscode_settings_trust = 1
@@ -1863,12 +1899,12 @@ if codePath != "" {
 		cmd = "cmd /c \""+codePath+"\" --install-extension MS-CEINTL.vscode-language-pack-ja"
 		pipeexec pipe_buf, cmd, 0
 		do : wait 1 : pipeget pipe_ln : until stat==0
-		exist dirinfo(DIRINFO_PROFILE)+"\\.vscode\\argv.json"
+		exist argvJsonPath
 		if strsize != -1 {
 			notesel noteText
-			noteload dirinfo(DIRINFO_PROFILE)+"\\.vscode\\argv.json"
+			noteload argvJsonPath
 			SettingsJson_Add noteText, "locale", "\"ja\"", 1
-			if stat : notesave dirinfo(DIRINFO_PROFILE)+"\\.vscode\\argv.json"
+			if stat : notesave argvJsonPath
 			noteunsel
 		}
 		vscode_ext_JapaneseLanguagePack = 1
@@ -1885,7 +1921,7 @@ if codePath != "" {
 		}
 		if hspPath != "" {
 			notesel noteText
-			noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+			noteload settingsJsonPath
 			CheckSettings_LanguageHsp3
 			if 0 {
 			#deffunc CheckSettings_LanguageHsp3
@@ -1904,7 +1940,7 @@ if codePath != "" {
 			;SettingsJson_Add noteText, "language-hsp3.makeCommands", "[\n        \"-PmCa --hsp3root \\\""+dblBackSlash_path+"\\\"\",\n        \"%FILEPATH%\"\n    ]" : replaced |= stat
 			return replaced
 			}
-			if stat : notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+			if stat : notesave settingsJsonPath
 			noteunsel
 		}
 		vscode_ext_LanguageHsp3 = 1
@@ -1921,7 +1957,7 @@ if codePath != "" {
 		}
 		if hspPath != "" {
 			notesel noteText
-			noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+			noteload settingsJsonPath
 			CheckSettings_AnalyzerMini
 			if 0 {
 			#deffunc CheckSettings_AnalyzerMini
@@ -1931,7 +1967,7 @@ if codePath != "" {
 			SettingsJson_Add noteText, "hsp3-analyzer-mini.hsp3-root", "\""+dblBackSlash_path+"\"" : replaced |= stat
 			return replaced
 			}
-			if stat : notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+			if stat : notesave settingsJsonPath
 			noteunsel
 		}
 		vscode_ext_AnalyzerMini = 1
@@ -1941,20 +1977,20 @@ if codePath != "" {
 	insSeq = 39 : gosub *DRAW_INSTALL_LIST
 	if vscode_settings_shortcutkey != 1 {
 		LOG_Add "VSCode - キーボードショートカット登録"
-		exist dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\keybindings.json"
+		exist keybindingsJsonPath
 		if strsize == -1 {
 			noteText = {"// 既定値を上書きするには、このファイル内にキー バインドを挿入しますauto[]\n[\n    {\n        "key": "f5",\n        "command": "language-hsp3.run",\n        "when": "editorLangId == 'hsp3'"\n    },\n    {\n        "key": "f1",\n        "command": "language-hsp3.helpman.search",\n        "when": "editorLangId == 'hsp3'"\n    }\n]"}
 			nkfcnv noteTextUTF8, noteText, "wS"
 			notesel noteTextUTF8
-			notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\keybindings.json"
+			notesave keybindingsJsonPath
 			noteunsel
 		}else {
 			notesel noteText
-			noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\keybindings.json"
+			noteload keybindingsJsonPath
 			replaced = 0
 			KeybindingsJson_Add noteText, "f5", "language-hsp3.run", "editorLangId == 'hsp3'"            : replaced |= stat
 			KeybindingsJson_Add noteText, "f1", "language-hsp3.helpman.search", "editorLangId == 'hsp3'" : replaced |= stat
-			if replaced : notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\keybindings.json"
+			if replaced : notesave keybindingsJsonPath
 			noteunsel
 		}
 		vscode_settings_shortcutkey = 1
@@ -2057,7 +2093,7 @@ if codePath != "" {
 		
 		// [hsp3]shiftjisでsettings.json上書きして、最終開いたら元に戻して再度上書きする（VSCodeの初回起動でfiles.autoGuessEncodingが機能しない問題を回避。元から[hsp3]shiftjisされてたらreplaced==0）
 		notesel noteText
-		noteload dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+		noteload settingsJsonPath
 		noteText_ori = noteText
 		replaced = 0
 		if match(noteText, "\"files\\.autoGuessEncoding\"\\s*:") != "" {
@@ -2066,11 +2102,11 @@ if codePath != "" {
 		if match(noteText, "\"\\[hsp3\\]\"\\s*:") == "" {
 			SettingsJson_Add noteText, "[hsp3]", "{ \"files.encoding\": \"shiftjis\" }" : replaced |= stat
 		}
-		if replaced : notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+		if replaced : notesave settingsJsonPath
 		noteunsel
 		
 		// 元々VSCodeのCode/Userが作られていなかったならWelcomeされる(?)。 Welcomeがあるかないかで起動処理を変更
-		if haveCodeUser == 0 {
+		if haveCodeUser == 0 || firstPortableZip == 1 {
 			// VSCodeを2回起動
 			_dir_file = hspPath+"\\sample\\basic\\HelloWorld_HspInVSCode.hsp"
 			_dir_folder = hspPath+"\\sample\\basic"
@@ -2146,7 +2182,7 @@ if codePath != "" {
 			loop
 			// 元のsettings.jsonを再度上書き保存
 			notesel noteText_ori
-			notesave dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
+			notesave settingsJsonPath
 			noteunsel
 		}
 		
