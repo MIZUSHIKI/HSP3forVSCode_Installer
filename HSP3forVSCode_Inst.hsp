@@ -290,8 +290,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #packopt manifest "manifest_h3fvsc.txt"  ; manifestが上手く適用されなかったらResourceHacker等で直接書き換えてください(hsp3ld.hrt)
 
 #define APP_NAME "HSP3 for VSCode インストーラー"
-#define APP_VERSION_STR "0.9.3.1"
-#define APP_VERSION_DOUBLE (0.931)
+#define APP_VERSION_STR "0.9.4"
+#define APP_VERSION_DOUBLE (0.94)
 #define APP_COPYRIGHT "Copyright(C) 2023 MIZUSHIKI"
 #define APP_DEVELOPER "MIZUSHIKI"
 #define APP_CONTACT_MAIL "suwa.mizushiki@gmail.com"
@@ -366,6 +366,8 @@ if stat : dialog "bregonig.dll の読み込みに失敗しました" : end
 #include "kernel32.as"
 #uselib "shlwapi.dll"
 #func global PathIsDirectory "PathIsDirectoryA" sptr
+#uselib "msvcrt"
+#func global rename "rename" str, str
 #uselib "winmm.dll"
 #cfunc global timeGetTime "timeGetTime"
 
@@ -535,12 +537,12 @@ return
 #global
 
 //--------------------------------------
-// サブディレクトリ含めたフォルダ削除
+// サブディレクトリ含めたフォルダ削除、コピー
 //--------------------------------------
 #module
 #uselib "shell32"
 #func SHFileOperation "SHFileOperationA" int
-#deffunc deletefolder str _dir
+#deffunc DeleteFolder str _dir
 	sdim pFrom, 260
 	pFrom = _dir
 
@@ -549,7 +551,23 @@ return
 	SHFILEOPSTRUCT.1 = 0x0003 // FO_DELETE
 	SHFILEOPSTRUCT.2 = varptr( pFrom )
 	SHFILEOPSTRUCT.3 = 0
-	SHFILEOPSTRUCT.4 = 0x0114 // FOF_SIMPLEPROGRESS | FOF_NOCONFIRMATION
+	SHFILEOPSTRUCT.4 = 0x0114 // FOF_SIMPLEPROGRESS | FOF_NOCONFIRMATION | FOF_SILENT
+
+	SHFileOperation varptr( SHFILEOPSTRUCT )
+	return stat
+
+#deffunc CopyFolder str _dir_from, str _dir_to
+	sdim pFrom, 260
+	sdim pTo, 260
+	pFrom = _dir_from
+	pTo = _dir_to
+
+	dim SHFILEOPSTRUCT, 8
+	SHFILEOPSTRUCT.0 = hWnd
+	SHFILEOPSTRUCT.1 = 0x0002 // FO_COPY
+	SHFILEOPSTRUCT.2 = varptr( pFrom )
+	SHFILEOPSTRUCT.3 = varptr( pTo )
+	SHFILEOPSTRUCT.4 = 0x0714 // FOF_SIMPLEPROGRESS | FOF_NOCONFIRMATION | FOF_SILENT | FOF_NOCONFIRMMKDIR | FOF_NOERRORUI
 
 	SHFileOperation varptr( SHFILEOPSTRUCT )
 	return stat
@@ -677,14 +695,16 @@ init@mod_TaskDialog
 	if p5 == 0 : option += "g"
 	if p6 == 0 : option += "m"
 	rxp = 0
+	mref stat_, 64
 	
 	BoSubst _pattern, _subst, option, strstartp, targetstartp, targetendp, 0, varptr(rxp), varptr(msg)
-	if stat <= 0 : return _strstart
+	if stat <= 0 : stat_ = 0 : return _strstart
 	
 	dupptr rx, rxp, 44, 4
 	dupptr out_, rx(0), rx(1)-rx(0)+1, 2
 	out = out_
 	BRegfree rxp
+	stat_ = 1
 	return out
 #global
 
@@ -793,7 +813,6 @@ init@mod_TaskDialog
 // settings.jsonファイルの内容に項目を追加する
 #deffunc SettingsJson_Add var noteTextUTF8, str name, str value, int isArgvJson
 	replaced = 0
-	noteTextUTF8_ = noteTextUTF8
 	if isArgvJson {
 		WORD_Ret = WORD_LF
 		WORD_Tab = "\t"
@@ -801,9 +820,7 @@ init@mod_TaskDialog
 		WORD_Ret = "\n"
 		WORD_Tab = "    "
 	}
-	// 本当はjsonコメントアウトできない。でもVSCodeのjsonは書いてあるときあるからjsonopenでバグらないように回避
-	noteTextUTF8_ = replaceUTF8( noteTextUTF8, "/\\*[\\s\\S]*?\\*/", "" )
-	noteTextUTF8_ = replaceUTF8( noteTextUTF8_, "//.*?$", "" )
+	noteTextUTF8_ = Json_CommentDelete( noteTextUTF8 )  ; 本当はjsonコメントアウトできない。でもVSCodeのjsonは書いてあるときあるからjsonopenでバグらないように回避
 	jsonopen@ jspRoot, noteTextUTF8_
 	jsongetobj@ jspNow, name
 	if jspNow != 0 {
@@ -836,7 +853,7 @@ init@mod_TaskDialog
 	jsonclose@
 	return replaced
 
-// settings.jsonファイルの内容に項目を追加する
+// settings.jsonファイルの内容の項目を削除する
 #deffunc SettingsJson_Delete var noteTextUTF8, str name, int isArgvJson
 	replaced = 0
 	noteTextUTF8_ = noteTextUTF8
@@ -847,9 +864,7 @@ init@mod_TaskDialog
 		WORD_Ret = "\n"
 		WORD_Tab = "    "
 	}
-	// 本当はjsonコメントアウトできない。でもVSCodeのjsonは書いてあるときあるからjsonopenでバグらないように回避
-	noteTextUTF8_ = replaceUTF8( noteTextUTF8, "/\\*[\\s\\S]*?\\*/", "" )
-	noteTextUTF8_ = replaceUTF8( noteTextUTF8_, "//.*?$", "" )
+	noteTextUTF8_ = Json_CommentDelete( noteTextUTF8 )  ; 本当はjsonコメントアウトできない。でもVSCodeのjsonは書いてあるときあるからjsonopenでバグらないように回避
 	jsonopen@ jspRoot, noteTextUTF8_
 	jsongetobj@ jspNow, name
 	if jspNow != 0 {
@@ -914,6 +929,29 @@ init@mod_TaskDialog
 	strrep text_, "$", "\\$"
 	return text_
 
+// json(c)のコメントアウトを消す
+#defcfunc Json_CommentDelete str _jsonText
+	// 苦肉の策だがコレでもダメなときありそう。でも上手い(スマートな)回避方法が思いつかない。
+	jsonText = _jsonText
+	repeat
+		jsonText = replaceUTF8( jsonText, "(\".*?)/\\*(.*?\")", "$1=_@/@_=$2" )
+		if stat == 0 : break
+	loop
+	repeat
+		jsonText = replaceUTF8( jsonText, "(\".*?)\\*/(.*?\")", "$1@=_/_=@$2" )
+		if stat == 0 : break
+	loop
+	jsonText = replaceUTF8( jsonText, "/\\*[\\s\\S]*?\\*/", "" )
+	jsonText = replaceUTF8( jsonText, "=_@/@_=", "/*" )
+	jsonText = replaceUTF8( jsonText, "@=_/_=@", "*/" )
+	repeat
+		jsonText = replaceUTF8( jsonText, "(\".*?)//(.*?\")", "$1_@=/=@_$2" )
+		if stat == 0 : break
+	loop
+	jsonText = replaceUTF8( jsonText, "//.*?(\\r|$)", "$1" )
+	jsonText = replaceUTF8( jsonText, "_@=/=@_", "//" )
+	return jsonText
+
 // OpenHspInVSCode.exe を作成（埋め込んであるファイルをコピーして保存）
 #deffunc Create_OpenHspInVSCode_exe str path_hspFolder, str path_codeFile
 	PathIsDirectory path_hspFolder : if stat == 0 : return
@@ -959,6 +997,7 @@ init@MyRoutine
 	argvJsonPath = dirinfo(DIRINFO_PROFILE)+"\\.vscode\\argv.json"
 	codeUserPath = dirinfo(DIRINFO_APPDATA)+"\\Code\\User"
 	serviceWorkerPath = dirinfo(DIRINFO_APPDATA)+"\\Code\\Service Worker"
+	myThemeSetiHspPath = dirinfo(DIRINFO_PROFILE)+"\\.vscode\\extensions\\my.theme-seti-hsp"
 	folderPath_downloads = GetKnownFolderPath("{374DE290-123F-4565-9164-39C4925E467B}")  ; ダウンロードフォルダ
 	PathIsDirectory folderPath_downloads
 	if stat == 0 : folderPath_downloads = dirinfo(DIRINFO_LOCAL_APPDATA) + "\\Temp"  ; ユーザー/AppData/Local/Tempフォルダ
@@ -1066,6 +1105,7 @@ init@MyRoutine
 		argvJsonPath = portableZipPath+"\\data\\argv.json"
 		codeUserPath = portableZipPath+"\\data\\user-data\\User"
 		serviceWorkerPath = portableZipPath+"\\data\\user-data\\Service Worker"
+		myThemeSetiHspPath = portableZipPath+"\\data\\extensions\\my.theme-seti-hsp"
 	}
 	// codeコマンドが登録されていたらそこからパスを取得
 	if codePath == "" {
@@ -1109,8 +1149,14 @@ init@MyRoutine
 		if instr(pipe_buf,0,"MS-CEINTL.vscode-language-pack-ja") != -1 : vscode_ext_JapaneseLanguagePack = 1
 		if instr(pipe_buf,0,"honobonosun.language-hsp3") != -1 : vscode_ext_LanguageHsp3 = 1
 		if instr(pipe_buf,0,"vain0x.hsp3-analyzer-mini") != -1 : vscode_ext_AnalyzerMini = 1
+		if instr(pipe_buf,0,"vscode.vscode-theme-seti-hsp") != -1 : vscode_ext_themeSetiHsp = 1  ; Ver.0.9.3～
 		notesel pipe_buf
-		if notemax != 3 || vscode_ext_JapaneseLanguagePack == 0 || vscode_ext_LanguageHsp3 == 0 || vscode_ext_AnalyzerMini == 0 : vscode_master = 1  ; 既にVSCodeを使ってた人判定
+		// 既にVSCodeを使ってた人判定
+		if vscode_ext_themeSetiHsp == 0 {  ; バージョンで条件分け
+			if notemax != 3 || vscode_ext_JapaneseLanguagePack == 0 || vscode_ext_LanguageHsp3 == 0 || vscode_ext_AnalyzerMini == 0 : vscode_master = 1
+		}else {
+			if notemax != 4 || vscode_ext_JapaneseLanguagePack == 0 || vscode_ext_LanguageHsp3 == 0 || vscode_ext_AnalyzerMini == 0 || vscode_ext_themeSetiHsp == 0 : vscode_master = 1
+		}
 		if portableZipPath != "" && notemax == 0 : vscode_master = 0
 		noteunsel
 	}
@@ -1126,6 +1172,17 @@ init@MyRoutine
 			if match(noteText,"\"key\"\\s*:\\s*\"f1\"\\s*,[\n\\s]*\"command\"\\s*:\\s*\"language-hsp3.helpman.search\"\\s*,[\n\\s]*\"when\"\\s*:\\s*\"editorLangId\\s*==\\s*'hsp3'\"") == "" : break
 			vscode_settings_shortcutkey = 1
 		loop
+	}
+	// アイコンテーマ設定状況を確認
+	PathIsDirectory myThemeSetiHspPath
+	if stat != 0 : vscode_settings_expIcon = 1
+	// アイコンテーマ：VSCodeインストール済みで独自に設定してたらパスする
+	exist settingsJsonPath
+	if strsize != -1 {
+		notesel noteText
+		noteload settingsJsonPath
+		noteunsel
+		if match(noteText, "\"workbench.iconTheme\"\\s*:") != "" : vscode_settings_expIcon = 1
 	}
 	
 //--------------------------------------
@@ -1195,69 +1252,72 @@ if 0 {
 	
 	color 20,20,20
 	if hspPath != "" : pos 10, : font MSGOTHIC, 12,1 : mes "済", 1 : color 160,160,160
-	font MSGOTHIC, 12, (insSeq/10==1) : pos 30,
-	mes "1.    ", 1 : if hspPath != "" : font MSGOTHIC, 12,8+(insSeq/10==1)
+	font MSGOTHIC, 12, (insSeq/100==1) : pos 30,
+	mes "1.    ", 1 : if hspPath != "" : font MSGOTHIC, 12,8+(insSeq/100==1)
 	mes "Hot Soup Processor 3.6"
-	font MSGOTHIC, 12, (insSeq==11) : pos 30,
-	mes "1-1.  ", 1 : if hspPath != "" || insSeq > 11 : font MSGOTHIC, 12,8+(insSeq==11)
+	font MSGOTHIC, 12, (insSeq==101) : pos 30,
+	mes "1-1.  ", 1 : if hspPath != "" || insSeq > 101 : font MSGOTHIC, 12,8+(insSeq==101)
 	mes " - ダウンロード"
-	font MSGOTHIC, 12, (insSeq==12) : pos 30,
-	mes "1-2.  ", 1 : if hspPath != "" || insSeq > 12 : font MSGOTHIC, 12,8+(insSeq==12)
+	font MSGOTHIC, 12, (insSeq==102) : pos 30,
+	mes "1-2.  ", 1 : if hspPath != "" || insSeq > 102 : font MSGOTHIC, 12,8+(insSeq==102)
 	mes " - アーカイブ展開、インストール"
 	
 	color 20,20,20
 	if installed_hspc == 1 : pos 10, : font MSGOTHIC, 12,1 : mes "済", 1 : color 160,160,160
-	font MSGOTHIC, 12, (insSeq/10==2) : pos 30,
-	mes "2.    ", 1 : if installed_hspc == 1 : font MSGOTHIC, 12,8+(insSeq/10==2)
+	font MSGOTHIC, 12, (insSeq/100==2) : pos 30,
+	mes "2.    ", 1 : if installed_hspc == 1 : font MSGOTHIC, 12,8+(insSeq/100==2)
 	mes "hspc"
-	font MSGOTHIC, 12, (insSeq==21) : pos 30,
-	mes "2-1.  ", 1 : if installed_hspc == 1 || insSeq > 21 : font MSGOTHIC, 12,8+(insSeq==21)
+	font MSGOTHIC, 12, (insSeq==201) : pos 30,
+	mes "2-1.  ", 1 : if installed_hspc == 1 || insSeq > 201 : font MSGOTHIC, 12,8+(insSeq==201)
 	mes " - ダウンロード"
-	font MSGOTHIC, 12, (insSeq==22) : pos 30,
-	mes "2-2.  ", 1 : if installed_hspc == 1 || insSeq > 22 : font MSGOTHIC, 12,8+(insSeq==22)
+	font MSGOTHIC, 12, (insSeq==202) : pos 30,
+	mes "2-2.  ", 1 : if installed_hspc == 1 || insSeq > 202 : font MSGOTHIC, 12,8+(insSeq==202)
 	mes " - アーカイブ展開、インストール"
 	
 	color 20,20,20
-	if codePath != "" && (vscode_settings_autoGuessEncoding != vscode_ext_notUseUtf8 && vscode_settings_filesEncodingShiftjis == vscode_ext_notUseUtf8) && vscode_ext_JapaneseLanguagePack == 1 && vscode_ext_LanguageHsp3 == 1 && vscode_ext_AnalyzerMini == 1 && vscode_settings_shortcutkey == 1 && (vscode_opt_trust==vscode_settings_trust) && (vscode_opt_insertSpaces==vscode_settings_insertSpaces) : pos 10, : font MSGOTHIC, 12,1 : mes "済", 1 : color 160,160,160
-	font MSGOTHIC, 12, (insSeq/10==3) : pos 30,
-	mes "3.    ", 1 : if codePath != "" && (vscode_settings_autoGuessEncoding != vscode_ext_notUseUtf8 && vscode_settings_filesEncodingShiftjis == vscode_ext_notUseUtf8) && vscode_ext_JapaneseLanguagePack == 1 && vscode_ext_LanguageHsp3 == 1 && vscode_ext_AnalyzerMini == 1 && vscode_settings_shortcutkey == 1 && (vscode_opt_trust == vscode_settings_trust) && (vscode_opt_insertSpaces==vscode_settings_insertSpaces) : font MSGOTHIC, 12,8+(insSeq/10==3)
+	if codePath != "" && (vscode_settings_autoGuessEncoding != vscode_ext_notUseUtf8 && vscode_settings_filesEncodingShiftjis == vscode_ext_notUseUtf8) && vscode_ext_JapaneseLanguagePack == 1 && vscode_ext_LanguageHsp3 == 1 && vscode_ext_AnalyzerMini == 1 && vscode_settings_shortcutkey == 1 && (vscode_opt_trust==vscode_settings_trust) && (vscode_opt_insertSpaces==vscode_settings_insertSpaces) && vscode_settings_expIcon != 0 : pos 10, : font MSGOTHIC, 12,1 : mes "済", 1 : color 160,160,160
+	font MSGOTHIC, 12, (insSeq/100==3) : pos 30,
+	mes "3.    ", 1 : if codePath != "" && (vscode_settings_autoGuessEncoding != vscode_ext_notUseUtf8 && vscode_settings_filesEncodingShiftjis == vscode_ext_notUseUtf8) && vscode_ext_JapaneseLanguagePack == 1 && vscode_ext_LanguageHsp3 == 1 && vscode_ext_AnalyzerMini == 1 && vscode_settings_shortcutkey == 1 && (vscode_opt_trust == vscode_settings_trust) && (vscode_opt_insertSpaces==vscode_settings_insertSpaces) && vscode_settings_expIcon != 0 : font MSGOTHIC, 12,8+(insSeq/100==3)
 	mes "VSCode"
-	font MSGOTHIC, 12, (insSeq==31) : pos 30,
-	mes "3-1.  ", 1 : if codePath != "" || insSeq > 31 : font MSGOTHIC, 12,8+(insSeq==31)
+	font MSGOTHIC, 12, (insSeq==301) : pos 30,
+	mes "3-1.  ", 1 : if codePath != "" || insSeq > 301 : font MSGOTHIC, 12,8+(insSeq==301)
 	mes " - ダウンロード"
-	font MSGOTHIC, 12, (insSeq==32) : pos 30,
-	mes "3-2.  ", 1 : if codePath != "" || insSeq > 32 : font MSGOTHIC, 12,8+(insSeq==32)
+	font MSGOTHIC, 12, (insSeq==302) : pos 30,
+	mes "3-2.  ", 1 : if codePath != "" || insSeq > 302 : font MSGOTHIC, 12,8+(insSeq==302)
 	mes " - インストール"
-	font MSGOTHIC, 12, (insSeq==33) : pos 30,
-	mes "3-3.  ", 1 : if (codePath != "" && (vscode_settings_autoGuessEncoding != vscode_ext_notUseUtf8 && vscode_settings_filesEncodingShiftjis == vscode_ext_notUseUtf8)) || insSeq > 33 : font MSGOTHIC, 12,8+(insSeq==33)
+	font MSGOTHIC, 12, (insSeq==303) : pos 30,
+	mes "3-3.  ", 1 : if (codePath != "" && (vscode_settings_autoGuessEncoding != vscode_ext_notUseUtf8 && vscode_settings_filesEncodingShiftjis == vscode_ext_notUseUtf8)) || insSeq > 303 : font MSGOTHIC, 12,8+(insSeq==303)
 	mes " - 文字化け対策設定"
-	font MSGOTHIC, 12, (insSeq==34) : pos 30,
-	mes "3-4.  ", 1 : if (vscode_opt_insertSpaces == vscode_settings_insertSpaces) || insSeq > 34 : font MSGOTHIC, 12,8+(insSeq==34)
+	font MSGOTHIC, 12, (insSeq==304) : pos 30,
+	mes "3-4.  ", 1 : if (vscode_opt_insertSpaces == vscode_settings_insertSpaces) || insSeq > 304 : font MSGOTHIC, 12,8+(insSeq==304)
 	mes " - インデントタブ設定"
-	font MSGOTHIC, 12, (insSeq==35) : pos 30,
-	mes "3-5.  ", 1 : if (vscode_opt_trust == vscode_settings_trust) || insSeq > 35 : font MSGOTHIC, 12,8+(insSeq==35)
+	font MSGOTHIC, 12, (insSeq==305) : pos 30,
+	mes "3-5.  ", 1 : if (vscode_opt_trust == vscode_settings_trust) || insSeq > 305 : font MSGOTHIC, 12,8+(insSeq==305)
 	mes " - 制限モード無効設定"
-	font MSGOTHIC, 12, (insSeq==36) : pos 30,
-	mes "3-6.  ", 1 : if (codePath != "" && vscode_ext_JapaneseLanguagePack == 1) || insSeq > 36 : font MSGOTHIC, 12,8+(insSeq==36)
+	font MSGOTHIC, 12, (insSeq==306) : pos 30,
+	mes "3-6.  ", 1 : if (codePath != "" && vscode_ext_JapaneseLanguagePack == 1) || insSeq > 306 : font MSGOTHIC, 12,8+(insSeq==306)
 	mes " - 日本語化"
-	font MSGOTHIC, 12, (insSeq==37) : pos 30,
-	mes "3-7.  ", 1 : if (codePath != "" && vscode_ext_LanguageHsp3 == 1) || insSeq > 37 : font MSGOTHIC, 12,8+(insSeq==37)
+	font MSGOTHIC, 12, (insSeq==307) : pos 30,
+	mes "3-7.  ", 1 : if (codePath != "" && vscode_ext_LanguageHsp3 == 1) || insSeq > 307 : font MSGOTHIC, 12,8+(insSeq==307)
 	mes " - language-hsp3"
-	font MSGOTHIC, 12, (insSeq==38) : pos 30,
-	mes "3-8.  ", 1 : if (codePath != "" && vscode_ext_AnalyzerMini == 1) || insSeq > 38 : font MSGOTHIC, 12,8+(insSeq==38)
+	font MSGOTHIC, 12, (insSeq==308) : pos 30,
+	mes "3-8.  ", 1 : if (codePath != "" && vscode_ext_AnalyzerMini == 1) || insSeq > 308 : font MSGOTHIC, 12,8+(insSeq==308)
 	mes " - HSP3 アナライザー・ミニ (LSP)"
-	font MSGOTHIC, 12, (insSeq==39) : pos 30,
-	mes "3-9.  ", 1 : if (codePath != "" && vscode_settings_shortcutkey == 1) || insSeq > 39 : font MSGOTHIC, 12,8+(insSeq==39)
+	font MSGOTHIC, 12, (insSeq==309) : pos 30,
+	mes "3-9.  ", 1 : if (codePath != "" && vscode_settings_shortcutkey == 1) || insSeq > 309 : font MSGOTHIC, 12,8+(insSeq==309)
 	mes " - キーボードショートカット登録"
+	font MSGOTHIC, 12, (insSeq==309) : pos 30,
+	mes "3-10. ", 1 : if (codePath != "" && vscode_settings_expIcon != 0) || insSeq > 309 : font MSGOTHIC, 12,8+(insSeq==309)
+	mes " - アイコンテーマ設定"
 	
 	
 	color 20,20,20
 	if assoced_user == 1 || assoced_HspInVSCode == 1 : pos 10, : font MSGOTHIC, 12,1 : mes "済", 1 : color 160,160,160
-	font MSGOTHIC, 12, (insSeq/10==4) : pos 30,
-	mes "4.    ", 1 : if hspforvscode_opt_assoc==0 || assoced_user == 1 || assoced_HspInVSCode == 1 : font MSGOTHIC, 12,8+(insSeq/10==4)
+	font MSGOTHIC, 12, (insSeq/100==4) : pos 30,
+	mes "4.    ", 1 : if hspforvscode_opt_assoc==0 || assoced_user == 1 || assoced_HspInVSCode == 1 : font MSGOTHIC, 12,8+(insSeq/100==4)
 	mes "拡張子関連付け"
-	font MSGOTHIC, 12, (insSeq==41) : pos 30,
-	mes "4-1.  ", 1 : if hspforvscode_opt_assoc==0 || assoced_user == 1 || assoced_HspInVSCode == 1 || insSeq > 41 : font MSGOTHIC, 12,8+(insSeq==41)
+	font MSGOTHIC, 12, (insSeq==401) : pos 30,
+	mes "4-1.  ", 1 : if hspforvscode_opt_assoc==0 || assoced_user == 1 || assoced_HspInVSCode == 1 || insSeq > 401 : font MSGOTHIC, 12,8+(insSeq==401)
 	mes " - 登録"
 	redraw 1
 	return
@@ -1551,11 +1611,11 @@ if 0 {
 //--------------------------------------
 // HSP3
 //--------------------------------------
-insSeq = 10 : gosub *DRAW_INSTALL_LIST
+insSeq = 100 : gosub *DRAW_INSTALL_LIST
 if hspPath == "" {
 	LOG_Add "== HSP3 =="
 	// ダウンロード
-	insSeq = 11 : gosub *DRAW_INSTALL_LIST
+	insSeq = 101 : gosub *DRAW_INSTALL_LIST
 	hspUrl = "https://www.onionsoft.net/hsp/file/hsp36.zip"
 	LOG_Add "ダウンロード - " + hspUrl
 	LOG_Temp "HSP3 download - 準備中..."
@@ -1566,7 +1626,7 @@ if hspPath == "" {
 	LOG_Add "ダウンロード完了"
 	
 	// アーカイブ展開
-	insSeq = 12 : gosub *DRAW_INSTALL_LIST
+	insSeq = 102 : gosub *DRAW_INSTALL_LIST
 	LOG_Add "アーカイブ展開 - " + getpath(hspUrl,8)
 	LOG_Temp "HSP3 unzip - 準備中..."
 	Unzipper zipFilePath, folderPath_unzipHsp, DownUnzipLabel{ LOG_Temp "HSP3 unzip - "+refstr : return }
@@ -1577,16 +1637,16 @@ if hspPath == "" {
 	DeleteFile zipFilePath
 	LOG_Add "アーカイブ削除 - " + getpath(hspUrl,8)
 	hspPath = _hspPath
-	insSeq = 13 : gosub *DRAW_INSTALL_LIST
+	insSeq = 103 : gosub *DRAW_INSTALL_LIST
 }
 //--------------------------------------
 // hspc
 //--------------------------------------
-insSeq = 20 : gosub *DRAW_INSTALL_LIST
+insSeq = 200 : gosub *DRAW_INSTALL_LIST
 if hspPath != "" && installed_hspc == 0 {
 	LOG_Add "== hspc =="
 	// ダウンロード
-	insSeq = 21 : gosub *DRAW_INSTALL_LIST
+	insSeq = 201 : gosub *DRAW_INSTALL_LIST
 	hspcUrl = "https://hsp.tv/contest/hspcontest1392.zip"
 	LOG_Add "ダウンロード - " + hspcUrl
 	LOG_Temp "hspc download - 準備中..."
@@ -1596,7 +1656,7 @@ if hspPath != "" && installed_hspc == 0 {
 	LOG_Add "ダウンロード完了"
 	
 	// アーカイブ展開
-	insSeq = 22 : gosub *DRAW_INSTALL_LIST
+	insSeq = 202 : gosub *DRAW_INSTALL_LIST
 	LOG_Add "アーカイブ展開 - " + getpath(zipFilePath,8)
 	LOG_Temp "hspc unzip - 準備中..."
 	Unzipper zipFilePath, folderPath_unzipHsp, DownUnzipLabel{ LOG_Temp "hspc unzip - "+refstr : return }
@@ -1615,10 +1675,10 @@ if hspPath != "" && installed_hspc == 0 {
 	}
 	LOG_Add "hspc インストール完了"
 	DeleteFile zipFilePath
-	deletefolder unzippedPath
+	DeleteFolder unzippedPath
 	LOG_Add "アーカイブ削除 - " + getpath(zipFilePath,8)
 	installed_hspc = 1
-	insSeq = 23 : gosub *DRAW_INSTALL_LIST
+	insSeq = 203 : gosub *DRAW_INSTALL_LIST
 }
 if hspPath != "" {
 	exist hspPath+"\\runtime\\hsprt" : runtimeHsprt = (strsize==-1)
@@ -1631,11 +1691,11 @@ if hspPath != "" {
 //--------------------------------------
 // VSCode
 //--------------------------------------
-insSeq = 30 : gosub *DRAW_INSTALL_LIST
+insSeq = 300 : gosub *DRAW_INSTALL_LIST
 if codePath == "" {
 	LOG_Add "== VSCode =="
 	// vscodeURLを取得
-	insSeq = 31 : gosub *DRAW_INSTALL_LIST
+	insSeq = 301 : gosub *DRAW_INSTALL_LIST
 	LOG_Add "VSCodeインストーラーのURLを取得"
 	pipe_buf = "" : pipe_ln = ""
 	if IsWin10orOver() {
@@ -1665,7 +1725,7 @@ if codePath == "" {
 	LOG_Add "ダウンロード完了"
 
 	// サイレントインストール
-	insSeq = 32 : gosub *DRAW_INSTALL_LIST
+	insSeq = 302 : gosub *DRAW_INSTALL_LIST
 	LOG_Add "インストール - " + getpath(vscodeInstallerFilePath,8)
 	pipe_buf = "" : pipe_ln = ""
 	cmd = "cmd /c \""+vscodeInstallerFilePath+"\" /VERYSILENT /NORESTART /MERGETASKS=!runcode"
@@ -1702,12 +1762,12 @@ if codePath == "" {
 //--------------------------------------
 // VSCode の設定を行う前に設定ファイルがあるか確認。無ければ一瞬起動して作ってもらう。
 //--------------------------------------
-insSeq = 32 : gosub *DRAW_INSTALL_LIST
+insSeq = 302 : gosub *DRAW_INSTALL_LIST
 if codePath != "" {
 	haveSettings = 1
 	exist argvJsonPath : if strsize == -1 : haveSettings = 0
-	PathIsDirectory codeUserPath : if stat == 0 : haveSettings = 0 : else : haveCodeUser = 1
-	if portableZipPath != "" : PathIsDirectory serviceWorkerPath : if stat == 0 : firstPortableZip = 1
+	PathIsDirectory codeUserPath : if stat == 0 : haveSettings = 0
+	PathIsDirectory serviceWorkerPath : if stat != 0 : haveServiceWorker = 1
 	if haveSettings == 0 {
 		LOG_Temp "VSCode 設定ファイル作成中..."
 		cmd = "cmd /c \""+codePath+"\""
@@ -1740,7 +1800,7 @@ if codePath != "" {
 //--------------------------------------
 // VSCode 機能拡張のインストールや各種設定を行う
 //--------------------------------------
-;insSeq = 32 : gosub *DRAW_INSTALL_LIST
+;insSeq = 302 : gosub *DRAW_INSTALL_LIST
 if codePath != "" {
 	
 	if (vscode_settings_autoGuessEncoding == vscode_ext_notUseUtf8 || vscode_settings_filesEncodingShiftjis != vscode_ext_notUseUtf8) || vscode_ext_JapaneseLanguagePack!=1 || vscode_ext_LanguageHsp3!=1 || vscode_ext_AnalyzerMini!=1 || vscode_settings_shortcutkey!=1 {
@@ -1748,7 +1808,7 @@ if codePath != "" {
 	}
 	
 	// Shift-JISを開いても文字化けしないように (files.autoGuessEncoding か [hsp3]files.encoding)
-	insSeq = 33 : gosub *DRAW_INSTALL_LIST
+	insSeq = 303 : gosub *DRAW_INSTALL_LIST
 	if vscode_ext_notUseUtf8 {
 		if vscode_settings_autoGuessEncoding == 1 || vscode_settings_filesEncodingShiftjis == 0 : LOG_Add "VSCode - 文字化け対策設定"
 		if vscode_settings_autoGuessEncoding == 1 {
@@ -1819,7 +1879,7 @@ if codePath != "" {
 		}
 	}
 	// 規定のインデントをスペースではなくタブにする
-	insSeq = 34 : gosub *DRAW_INSTALL_LIST
+	insSeq = 304 : gosub *DRAW_INSTALL_LIST
 	if vscode_settings_insertSpaces == 1 {
 		if vscode_opt_insertSpaces == 0 {
 			LOG_Add "VSCode - インデントタブ設定"
@@ -1855,7 +1915,7 @@ if codePath != "" {
 		}
 	}
 	// 制限モード無効設定（セキュリティ：ワークスペース常に信頼）
-	insSeq = 35 : gosub *DRAW_INSTALL_LIST
+	insSeq = 305 : gosub *DRAW_INSTALL_LIST
 	if vscode_settings_trust == 1 {
 		if vscode_opt_trust == 0 {
 			LOG_Add "VSCode - 制限モード無効設定"
@@ -1892,7 +1952,7 @@ if codePath != "" {
 	}
 	
 	// VSCode 日本語化
-	insSeq = 36 : gosub *DRAW_INSTALL_LIST
+	insSeq = 306 : gosub *DRAW_INSTALL_LIST
 	if vscode_ext_JapaneseLanguagePack != 1 {
 		LOG_Add "VSCode - 日本語化拡張機能インストール"
 		pipe_buf = "" : pipe_ln = ""
@@ -1910,7 +1970,7 @@ if codePath != "" {
 		vscode_ext_JapaneseLanguagePack = 1
 	}
 	// language-hsp3 for VSCode
-	insSeq = 37 : gosub *DRAW_INSTALL_LIST
+	insSeq = 307 : gosub *DRAW_INSTALL_LIST
 	if vscode_ext_LanguageHsp3 != 1 {
 		LOG_Add "VSCode - language-hsp3拡張機能インストール"
 		if vscode_ext_LanguageHsp3 == 0 {
@@ -1946,7 +2006,7 @@ if codePath != "" {
 		vscode_ext_LanguageHsp3 = 1
 	}
 	// HSP3 アナライザー・ミニ for VSCode
-	insSeq = 38 : gosub *DRAW_INSTALL_LIST
+	insSeq = 308 : gosub *DRAW_INSTALL_LIST
 	if vscode_ext_AnalyzerMini != 1 {
 		LOG_Add "VSCode - HSP3 アナライザー・ミニ (LSP)拡張機能インストール"
 		if vscode_ext_AnalyzerMini == 0 {
@@ -1974,7 +2034,7 @@ if codePath != "" {
 	}
 
 	// キーボードショートカット登録
-	insSeq = 39 : gosub *DRAW_INSTALL_LIST
+	insSeq = 309 : gosub *DRAW_INSTALL_LIST
 	if vscode_settings_shortcutkey != 1 {
 		LOG_Add "VSCode - キーボードショートカット登録"
 		exist keybindingsJsonPath
@@ -1995,13 +2055,84 @@ if codePath != "" {
 		}
 		vscode_settings_shortcutkey = 1
 	}
+	// アイコンテーマの登録
+	insSeq = 310 : gosub *DRAW_INSTALL_LIST
+	if vscode_settings_expIcon != 1 {
+		LOG_Add "VSCode - アイコンテーマ設定"
+		vscode_themeSetiPath = codePath
+		vscode_themeSetiPath = getpath(vscode_themeSetiPath,32) : vscode_themeSetiPath = strtrim(vscode_themeSetiPath,2,'\\')
+		vscode_themeSetiPath = getpath(vscode_themeSetiPath,32) : vscode_themeSetiPath = strtrim(vscode_themeSetiPath,2,'\\')
+		vscode_themeSetiPath += "\\resources\\app\\extensions\\theme-seti"
+		PathIsDirectory vscode_themeSetiPath
+		if stat != 0 {
+			// 元となるアイコンテーマフォルダをコピー
+			CopyFolder vscode_themeSetiPath, getpath(myThemeSetiHspPath,32)
+			;rename getpath(myThemeSetiHspPath,32)+"theme-seti", myThemeSetiHspPath
+			notesel noteText
+			// 元のアイコンテーマ設定を改造
+			noteload getpath(myThemeSetiHspPath,32)+"theme-seti"+"\\package.json"
+			replaced = 0
+			SettingsJson_Add noteText, "name", "\"vscode-theme-seti-hsp\"" : replaced |= stat
+			SettingsJson_Add noteText, "displayName", "\"Seti File Icon Theme (HSP)\"" : replaced |= stat
+			matchText = submatch(noteText, "\"contributes\"\\s*:\\s*\\{\\s*\"iconThemes\"\\s*:\\s*\\[([\\s\\S]*?)\\]")
+			matchText = submatch(matchText, "\"path\"\\s*:\\s*\"(.*?)\"")
+			if matchText != "" {
+				SettingsJson_Add noteText, "contributes", "{\"iconThemes\":[{\"id\":\"vs-seti-hsp\",\"label\":\"Seti (Visual Studio Code) - HSP\",\"path\":\""+matchText+"\"}]}" : replaced |= stat
+			}
+			if replaced : notesave getpath(myThemeSetiHspPath,32)+"theme-seti"+"\\package.json"
+			// 拡張子アイコン登録
+			noteload getpath(myThemeSetiHspPath,32)+"theme-seti"+"\\icons\\vs-seti-icon-theme.json"
+			if instr(noteText, 0, "_hsp") == -1 {
+				noteText = replaceUTF8(noteText, "(\"_zip_1\"[\\s\n]*:[\\s\n]*\\{[\\s\n]*\"fontCharacter\"[\\s\n]*:[\\s\n]*\"\\\\\\\\[0-9a-fA-F]+\"[\\s\n]*,[\\s\n]*\"fontColor\"[\\s\n]*:[\\s\n]*\"[#0-9a-fA-F]+\"[\\s\n]*\\})", "$1,\"_hsp\":{\"iconPath\": \"./hspscr_icon.ico\"},\"_as\":{\"iconPath\": \"./as.png\"}")
+				noteText = replaceUTF8(noteText, "(\"ds_store\"[\\s\n]*:[\\s\n]*\"_ignored\")", "$1,\"hsp\": \"_hsp\",\"as\": \"_as\"")
+				notesave getpath(myThemeSetiHspPath,32)+"theme-seti"+"\\icons\\vs-seti-icon-theme.json"
+			}
+			noteunsel
+			// アイコン画像ファイルをコピー
+			exist hspPath+"\\hspscr_icon.ico"
+			if strsize != -1 {
+				bcopy hspPath+"\\hspscr_icon.ico", getpath(myThemeSetiHspPath,32)+"theme-seti"+"\\icons\\hspscr_icon.ico"
+			}
+			exist hspPath+"\\hspscr_icon.ico"
+			if strsize != -1 {
+				path = hspPath+"\\hsed3le.exe"
+				out = getpath(myThemeSetiHspPath,32)+"theme-seti"+"\\icons\\as.png"
+				cmd={"powershell "Add-Type -AssemblyName System.Drawing;
+					$IconData = [System.Drawing.Icon]::ExtractAssociatedIcon( \\""}+path+{"\\" );
+					$FS = New-Object System.IO.FileStream( \\""}+out+{"\\", [System.IO.FileMode]::Create );
+					$IconData.Save( $fs );
+					$fs.Close();
+					$fs.Dispose();
+					$IconData.Dispose();"
+					"}
+				pipeexec pipe_buf, cmd, 0
+				do : wait 1 : pipeget pipe_ln : until stat==0
+			}
+			// settings.jsonに設定書き込み
+			exist settingsJsonPath
+			if strsize == -1 {
+				noteText = "{\n    \"workbench.iconTheme\": \"vs-seti-hsp\"\n}"
+				notesel noteText
+				notesave settingsJsonPath
+				noteunsel
+			}else {
+				notesel noteText
+				noteload settingsJsonPath
+				replaced = 0
+				SettingsJson_Add noteText, "workbench.iconTheme", "\"vs-seti-hsp\"" : replaced |= stat
+				if replaced : notesave settingsJsonPath
+				noteunsel
+			}
+		}
+		vscode_settings_expIcon = 2
+	}
 
 //--------------------------------------
 // 関連付け
 //--------------------------------------
-	insSeq = 40 : gosub *DRAW_INSTALL_LIST
+	insSeq = 400 : gosub *DRAW_INSTALL_LIST
 	if hspPath != "" && hspforvscode_opt_assoc==1 && assoced_user == 0 && assoced_HspInVSCode == 0 {
-		insSeq = 41 : gosub *DRAW_INSTALL_LIST
+		insSeq = 401 : gosub *DRAW_INSTALL_LIST
 		LOG_Add "拡張子関連付け設定"
 		// 既に関連付けされているProgIdを取得
 		maeRegHsp = GetRegStrValue( HKEY_LOCAL_MACHINE, "SOFTWARE\\Classes\\.hsp" )
@@ -2021,7 +2152,7 @@ if codePath != "" {
 //--------------------------------------
 // インストール完了
 //--------------------------------------
-	insSeq = 50 : gosub *DRAW_INSTALL_LIST
+	insSeq = 500 : gosub *DRAW_INSTALL_LIST
 	LOG_Add "セットアップ完了"
 	if hspPath != "" {
 		// 関連付け用実行ファイル(OpenHspInVSCode.exe)を生成
@@ -2105,8 +2236,8 @@ if codePath != "" {
 		if replaced : notesave settingsJsonPath
 		noteunsel
 		
-		// 元々VSCodeのCode/Userが作られていなかったならWelcomeされる(?)。 Welcomeがあるかないかで起動処理を変更
-		if haveCodeUser == 0 || firstPortableZip == 1 {
+		// 元々VSCodeのCode/Service Workerが作られていなかったならWelcomeされる(?)。 Welcomeがあるかないかで起動処理を変更
+		if haveServiceWorker == 0 {
 			// VSCodeを2回起動
 			_dir_file = hspPath+"\\sample\\basic\\HelloWorld_HspInVSCode.hsp"
 			_dir_folder = hspPath+"\\sample\\basic"
@@ -2135,8 +2266,31 @@ if codePath != "" {
 				if instr(pipe_buf, 0, "window [1] (Welcome") != -1 : break  ;
 				wait 50
 			loop
+			// アイコンテーマ設定の最終工程：VSCode起動中にextensions内のフォルダを操作してVSCodeに認識させる
+			if vscode_settings_expIcon == 2 {
+				rename getpath(myThemeSetiHspPath,32)+"theme-seti", myThemeSetiHspPath
+				notesel noteText
+				repeat 10
+					wait 50
+					exist getpath(myThemeSetiHspPath,32)+"extensions.json"
+					if strsize != -1 {
+						noteload getpath(myThemeSetiHspPath,32)+"extensions.json"
+						if instr(noteText,0,"theme-seti-hsp") != -1 : break
+					}
+					gsel 3 : mes ".",1 : gsel 0
+				loop
+				noteunsel
+			}
 			
 		}else {
+			// 起動して落ち着いた基準として Code/Network/TransportSecurityファイル の中身を記憶して、変更されたか確認する
+			maeText_TransportSecurity = ""
+			exist getpath(codeUserPath,32)+"Network\\TransportSecurity"
+			if strsize != -1 {
+				notesel maeText_TransportSecurity
+				noteload getpath(codeUserPath,32)+"Network\\TransportSecurity"
+				noteunsel
+			}
 			// VSCodeを2回起動
 			pipe_buf = "" : pipe_ln = ""
 			cmd = "cmd /c \""+codePath+"\""
@@ -2149,6 +2303,37 @@ if codePath != "" {
 				vscodeHwnd = stat
 				if vscodeHwnd : wait 200 : break  ; VSCodeが開いて2秒待てばメニューが描画されるだろうか
 			loop
+			// アイコンテーマ設定の最終工程：VSCode起動中にextensions内のフォルダを操作してVSCodeに認識させる
+			if vscode_settings_expIcon == 2 {
+				if maeText_TransportSecurity != "" {
+					// 起動して落ち着いたか確認
+					notesel noteText
+					repeat 10
+						wait 200
+						exist getpath(codeUserPath,32)+"Network\\TransportSecurity"
+						if strsize != -1 {
+							noteload getpath(codeUserPath,32)+"Network\\TransportSecurity"
+							if noteText != maeText_TransportSecurity : break
+						}
+						gsel 3 : mes ".",1 : gsel 0
+					loop
+					noteunsel
+				}else {
+					wait 200  ; 一応
+				}
+				rename getpath(myThemeSetiHspPath,32)+"theme-seti", myThemeSetiHspPath
+				notesel noteText
+				repeat 10
+					wait 100
+					exist getpath(myThemeSetiHspPath,32)+"extensions.json"
+					if strsize != -1 {
+						noteload getpath(myThemeSetiHspPath,32)+"extensions.json"
+						if instr(noteText,0,"theme-seti-hsp") != -1 : break
+					}
+					gsel 3 : mes ".",1 : gsel 0
+				loop
+				noteunsel
+			}
 			
 		}
 		// 1回目のVSCcode起動が完了したので、閉じてから再起動
@@ -2190,7 +2375,7 @@ if codePath != "" {
 	goto *quit_
 }
 // 普通に完了すれば hspPath!="" && codePath!="" になるので、ここには来ない。
-insSeq = 100 : gosub *DRAW_INSTALL_LIST
+insSeq = 1000 : gosub *DRAW_INSTALL_LIST
 dialog "インストール処理は終了しましたが、なんらかの理由でインストールに失敗しました。\n\nインストーラー開発者にログ情報を伝え問題を報告してください。\n\n"+APP_DEVELOPER+"\n"+APP_CONTACT_MAIL, 1, APP_NAME
 stop
 //------------------------------------------------------------------------------
