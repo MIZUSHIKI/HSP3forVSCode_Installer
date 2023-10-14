@@ -1,0 +1,7 @@
+PowerShell
+
+>npm install
+... Resurrection of node_modules folder.
+
+>npx vsce package
+... vsix file is created.

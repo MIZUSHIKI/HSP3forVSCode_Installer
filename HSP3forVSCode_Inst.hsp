@@ -266,19 +266,21 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//  HSP3 for VSCode インストーラー  Ver.0.9 - Copyright(C) 2023 MIZUSHIKI
+//  HSP3 for VSCode インストーラー  Ver.1.0 - Copyright(C) 2023 MIZUSHIKI
 //
 //   下記項目のダウンロード＆インストール、各種設定を行います。
 //
 //     HSP3.6
 //       - hspc (thanks ほのぼのぽー さん)
-//       - 関連付け[OpenHspInVSCode.exe]
+//       - 関連付け [OpenHspInVSCode.exe]
 //     VSCode
 //       - 文字化け、インデント、制限モード設定
 //       - 日本語化拡張
 //       - language-hsp3拡張 (thanks ほのぼのぽー さん)
 //       - HSP3 アナライザー・ミニ (LSP)拡張 (thanks 令掛ベイン さん)
+//       - HSP3 Debug表示設定拡張
 //       - ショートカットキー登録
+//       - アイコンテーマ設定
 //
 //   開発環境 : HSP3.6 + packdll
 //
@@ -290,8 +292,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #packopt manifest "manifest_h3fvsc.txt"  ; manifestが上手く適用されなかったらResourceHacker等で直接書き換えてください(hsp3ld.hrt)
 
 #define APP_NAME "HSP3 for VSCode インストーラー"
-#define APP_VERSION_STR "0.9.4"
-#define APP_VERSION_DOUBLE (0.94)
+#define APP_VERSION_STR "1.0"
+#define APP_VERSION_DOUBLE (1.0)
 #define APP_COPYRIGHT "Copyright(C) 2023 MIZUSHIKI"
 #define APP_DEVELOPER "MIZUSHIKI"
 #define APP_CONTACT_MAIL "suwa.mizushiki@gmail.com"
@@ -300,7 +302,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #pack "hsptmp"  ; 自身のスクリプトを表示する必要がありそうなので埋め込む
 #pack "OHIVSCode.exe"  ; 古い環境で実行ファイル化するときのために文字数を削っておく(OpenHspInVSCode.exe)
 // ↑.hspファイル関連付け用実行ファイル。VSCodeでHSPファイルとそのフォルダを同時に指定して開くためのもの。(末尾にスクリプト記載)
-
+#pack "eh3dw001.vsix"
+// ↑VSCodeでDebugウィンドウの表示/非表示を手軽に切り替えられるようにするための拡張機能
 
 //==============================================================================
 // packdll - 可能であれば実行ファイルにdllを埋め込んでみる
@@ -991,6 +994,10 @@ init@MyRoutine
 	// 変数
 	sdim pipe_ln, 4096
 	sdim pipe_buf, 64000
+	install_HspVer = "3.6"
+	install_HspVer_beta = "3.7 β6"
+	urlZip_Hsp36 = "https://www.onionsoft.net/hsp/file/hsp36.zip"
+	urlZip_Hsp37b = "https://www.onionsoft.net/hsp/file/hsp37b6.zip"
 	portableZipPath = ""
 	settingsJsonPath = dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\settings.json"
 	keybindingsJsonPath = dirinfo(DIRINFO_APPDATA)+"\\Code\\User\\keybindings.json"
@@ -998,6 +1005,7 @@ init@MyRoutine
 	codeUserPath = dirinfo(DIRINFO_APPDATA)+"\\Code\\User"
 	serviceWorkerPath = dirinfo(DIRINFO_APPDATA)+"\\Code\\Service Worker"
 	myThemeSetiHspPath = dirinfo(DIRINFO_PROFILE)+"\\.vscode\\extensions\\my.theme-seti-hsp"
+	localExtHSP3DebugWinPath = dirinfo(DIRINFO_PROFILE)+"\\.vscode\\extensions\\local-ext-hsp3debugwin-0.0.1.vsix"
 	folderPath_downloads = GetKnownFolderPath("{374DE290-123F-4565-9164-39C4925E467B}")  ; ダウンロードフォルダ
 	PathIsDirectory folderPath_downloads
 	if stat == 0 : folderPath_downloads = dirinfo(DIRINFO_LOCAL_APPDATA) + "\\Temp"  ; ユーザー/AppData/Local/Tempフォルダ
@@ -1043,7 +1051,7 @@ init@MyRoutine
 	regHKey(3)=HKEY_CLASSES_ROOT : regSubKey(3)=".hsp_auto_file\\shell\\open\\command"
 	regHKey(4)=HKEY_CURRENT_USER : regSubKey(4)="Software\\Classes\\.hsp\\shell\\open\\command"
 	regHKey(5)=HKEY_CLASSES_ROOT : regSubKey(5)=".hsp\\shell\\open\\command"
-	regHKey(6)=HKEY_CLASSES_ROOT : regSubKey(6)="HSP3Script\shell\open\command"
+	regHKey(6)=HKEY_CLASSES_ROOT : regSubKey(6)="HSP3Script\\shell\\open\\command"
 	foreach regHKey
 		path = GetRegStrValue( regHKey(cnt), regSubKey(cnt) )
 		if path == "" : continue
@@ -1073,9 +1081,10 @@ init@MyRoutine
 	
 	// hspcの確認
 	if hspPath != "" {
-		exist hspPath+"\\hspc334.exe"
-		if strsize != -1 : installed_hspc = 1
+		exist hspPath+"\\hspc.exe"
+		if strsize == 418854 : installed_hspc = 1  ; hspc3.5.1 : 418854byte
 	}
+	hspPath_atLaunch = hspPath  ; hsp36 ←→ hsp37β 切り替えのため保管
 	;logmes "HspPath="+hspPath
 	
 //--------------------------------------
@@ -1106,6 +1115,7 @@ init@MyRoutine
 		codeUserPath = portableZipPath+"\\data\\user-data\\User"
 		serviceWorkerPath = portableZipPath+"\\data\\user-data\\Service Worker"
 		myThemeSetiHspPath = portableZipPath+"\\data\\extensions\\my.theme-seti-hsp"
+		localExtHSP3DebugWinPath = portableZipPath+"\\data\\extensions\\local-ext-hsp3debugwin-0.0.1.vsix"
 	}
 	// codeコマンドが登録されていたらそこからパスを取得
 	if codePath == "" {
@@ -1150,6 +1160,7 @@ init@MyRoutine
 		if instr(pipe_buf,0,"honobonosun.language-hsp3") != -1 : vscode_ext_LanguageHsp3 = 1
 		if instr(pipe_buf,0,"vain0x.hsp3-analyzer-mini") != -1 : vscode_ext_AnalyzerMini = 1
 		if instr(pipe_buf,0,"vscode.vscode-theme-seti-hsp") != -1 : vscode_ext_themeSetiHsp = 1  ; Ver.0.9.3～
+		if instr(pipe_buf,0,"undefined_publisher.local-ext-hsp3debugwin") != -1 : vscode_ext_hsp3debugwin = 1  ; Ver.1.0～
 		notesel pipe_buf
 		// 既にVSCodeを使ってた人判定
 		if vscode_ext_themeSetiHsp == 0 {  ; バージョンで条件分け
@@ -1183,6 +1194,44 @@ init@MyRoutine
 		noteload settingsJsonPath
 		noteunsel
 		if match(noteText, "\"workbench.iconTheme\"\\s*:") != "" : vscode_settings_expIcon = 1
+	}
+	
+	// settings.jsonの書き換え必要性の確認
+	//  - hsp334.exe不要化に伴うもの
+	//  - hsp36だけでなくhsp37beta等のフォルダも考慮する必要(前回:hsp37beta/hspc.exe → 今回:hsp36/hspc.exe になる可能性)
+	UpdateIfNeed_vscode_ext_LanguageHsp3
+	UpdateIfNeed_vscode_ext_AnalyzerMini
+	if 0 {
+	#deffunc UpdateIfNeed_vscode_ext_LanguageHsp3
+		if vscode_ext_LanguageHsp3 != 0 {
+			vscode_ext_LanguageHsp3 = 2
+			if hspPath != "" {
+				exist settingsJsonPath
+				if strsize != -1 {
+					notesel noteText
+					noteload settingsJsonPath
+					noteunsel
+					CheckSettings_LanguageHsp3
+					if stat == 0 : vscode_ext_LanguageHsp3 = 1
+				}
+			}
+		}
+		return
+	#deffunc UpdateIfNeed_vscode_ext_AnalyzerMini
+		if vscode_ext_AnalyzerMini != 0 {
+			vscode_ext_AnalyzerMini = 2
+			if hspPath != "" {
+				exist settingsJsonPath
+				if strsize != -1 {
+					notesel noteText
+					noteload settingsJsonPath
+					noteunsel
+					CheckSettings_AnalyzerMini
+					if stat == 0 : vscode_ext_AnalyzerMini = 1
+				}
+			}
+		}
+		return
 	}
 	
 //--------------------------------------
@@ -1231,7 +1280,7 @@ init@MyRoutine
 //--------------------------------------
 // GUI作成
 //--------------------------------------
-	scSizeY = 550 : if assoced_user == 0 : scSizeY -= 40
+	scSizeY = 568 : if assoced_user == 0 : scSizeY -= 40
 	screen 0, 640,scSizeY, 2, (ginfo_dispx-640)/2, (ginfo_dispy*90/100-scSizeY)/2
 	title APP_NAME
 	hwnd_0 = hwnd
@@ -1254,7 +1303,11 @@ if 0 {
 	if hspPath != "" : pos 10, : font MSGOTHIC, 12,1 : mes "済", 1 : color 160,160,160
 	font MSGOTHIC, 12, (insSeq/100==1) : pos 30,
 	mes "1.    ", 1 : if hspPath != "" : font MSGOTHIC, 12,8+(insSeq/100==1)
-	mes "Hot Soup Processor 3.6"
+	if hsp3_opt_37beta == 0 {
+		mes "Hot Soup Processor "+install_HspVer
+	}else {
+		mes "Hot Soup Processor "+install_HspVer_beta
+	}
 	font MSGOTHIC, 12, (insSeq==101) : pos 30,
 	mes "1-1.  ", 1 : if hspPath != "" || insSeq > 101 : font MSGOTHIC, 12,8+(insSeq==101)
 	mes " - ダウンロード"
@@ -1275,7 +1328,7 @@ if 0 {
 	mes " - アーカイブ展開、インストール"
 	
 	color 20,20,20
-	if codePath != "" && (vscode_settings_autoGuessEncoding != vscode_ext_notUseUtf8 && vscode_settings_filesEncodingShiftjis == vscode_ext_notUseUtf8) && vscode_ext_JapaneseLanguagePack == 1 && vscode_ext_LanguageHsp3 == 1 && vscode_ext_AnalyzerMini == 1 && vscode_settings_shortcutkey == 1 && (vscode_opt_trust==vscode_settings_trust) && (vscode_opt_insertSpaces==vscode_settings_insertSpaces) && vscode_settings_expIcon != 0 : pos 10, : font MSGOTHIC, 12,1 : mes "済", 1 : color 160,160,160
+	if codePath != "" && (vscode_settings_autoGuessEncoding != vscode_ext_notUseUtf8 && vscode_settings_filesEncodingShiftjis == vscode_ext_notUseUtf8) && vscode_ext_JapaneseLanguagePack == 1 && vscode_ext_LanguageHsp3 == 1 && vscode_ext_AnalyzerMini == 1 && vscode_ext_hsp3debugwin == 1 && vscode_settings_shortcutkey == 1 && (vscode_opt_trust==vscode_settings_trust) && (vscode_opt_insertSpaces==vscode_settings_insertSpaces) && vscode_settings_expIcon != 0 : pos 10, : font MSGOTHIC, 12,1 : mes "済", 1 : color 160,160,160
 	font MSGOTHIC, 12, (insSeq/100==3) : pos 30,
 	mes "3.    ", 1 : if codePath != "" && (vscode_settings_autoGuessEncoding != vscode_ext_notUseUtf8 && vscode_settings_filesEncodingShiftjis == vscode_ext_notUseUtf8) && vscode_ext_JapaneseLanguagePack == 1 && vscode_ext_LanguageHsp3 == 1 && vscode_ext_AnalyzerMini == 1 && vscode_settings_shortcutkey == 1 && (vscode_opt_trust == vscode_settings_trust) && (vscode_opt_insertSpaces==vscode_settings_insertSpaces) && vscode_settings_expIcon != 0 : font MSGOTHIC, 12,8+(insSeq/100==3)
 	mes "VSCode"
@@ -1304,10 +1357,13 @@ if 0 {
 	mes "3-8.  ", 1 : if (codePath != "" && vscode_ext_AnalyzerMini == 1) || insSeq > 308 : font MSGOTHIC, 12,8+(insSeq==308)
 	mes " - HSP3 アナライザー・ミニ (LSP)"
 	font MSGOTHIC, 12, (insSeq==309) : pos 30,
-	mes "3-9.  ", 1 : if (codePath != "" && vscode_settings_shortcutkey == 1) || insSeq > 309 : font MSGOTHIC, 12,8+(insSeq==309)
+	mes "3-9.  ", 1 : if (codePath != "" && vscode_ext_hsp3debugwin == 1) || insSeq > 309 : font MSGOTHIC, 12,8+(insSeq==309)
+	mes " - HSP3 Debug表示設定拡張"
+	font MSGOTHIC, 12, (insSeq==310) : pos 30,
+	mes "3-10. ", 1 : if (codePath != "" && vscode_settings_shortcutkey == 1) || insSeq > 310 : font MSGOTHIC, 12,8+(insSeq==310)
 	mes " - キーボードショートカット登録"
-	font MSGOTHIC, 12, (insSeq==309) : pos 30,
-	mes "3-10. ", 1 : if (codePath != "" && vscode_settings_expIcon != 0) || insSeq > 309 : font MSGOTHIC, 12,8+(insSeq==309)
+	font MSGOTHIC, 12, (insSeq==311) : pos 30,
+	mes "3-11. ", 1 : if (codePath != "" && vscode_settings_expIcon != 0) || insSeq > 311 : font MSGOTHIC, 12,8+(insSeq==311)
 	mes " - アイコンテーマ設定"
 	
 	
@@ -1327,12 +1383,12 @@ if 0 {
 	font MSGOTHIC, 12, 1
 	pos 320, 15
 	mes "HSP3をインストールするフォルダを選択："
-	sdim UTF16, 64 : cnvstow UTF16, "通常インストール先 => C:\\"
+	sdim UTF16, 64 : cnvstow UTF16, "通常インストール先 => C:\\ (Cドライブ直下)"
 	cy = ginfo_cy
 	input input_HspInstallFolder, 240, 20
 	input_HspInstallFolder_objId = stat : objids(length.objids) = stat
 	sendmsg objinfo_hwnd( stat ), 0x1501/*EM_SETCUEBANNER*/, 1, varptr(UTF16)
-	SetTooltip objinfo_hwnd(input_HspInstallFolder_objId), "HSP3通常インストール先 => C:\\ 直下"
+	SetTooltip objinfo_hwnd(input_HspInstallFolder_objId), "HSP3通常インストール先 => C:\\ (Cドライブ直下)"
 	if hspPath != "" : objenable objids(length.objids-1), 0
 	objsize 60, 24
 	pos 570, cy-2
@@ -1341,36 +1397,20 @@ if 0 {
 		;if hspPath != "" : selFolMesText = "HSP3インストールフォルダを選択\nHSP3.6以上のインストールフォルダも指定可能"   ; hspcはまだHsp3.7βに未対応の様子
 		sf="" : selfolder sf, selFolMesText
 		if stat != 0 : return
+		*change_HspVer  ; hsp37beta ←→ hsp36 チェック切り替えでここにもgosub来る
 		hspPath = ""
 		installed_hspc = 0
 		exist sf+"\\hsed3.exe"
 		if strsize != -1 : hspPath = sf
 		if hspPath != "" {
 			// hspcの確認
-			exist hspPath+"\\hspc334.exe"
-			if strsize != -1 : installed_hspc = 1
+			exist hspPath+"\\hspc.exe"
+			if strsize == 418854 : installed_hspc = 1  ; hspc3.5.1 : 418854byte
 			sf = "インストール済み -> "+hspPath
 		}
-		if vscode_ext_LanguageHsp3 != 0 {
-			vscode_ext_LanguageHsp3 = 2
-			if hspPath != "" {
-				notesel noteText
-				noteload settingsJsonPath
-				noteunsel
-				CheckSettings_LanguageHsp3
-				if stat == 0 : vscode_ext_LanguageHsp3 = 1
-			}
-		}
-		if vscode_ext_AnalyzerMini != 0 {
-			vscode_ext_AnalyzerMini = 2
-			if hspPath != "" {
-				notesel noteText
-				noteload settingsJsonPath
-				noteunsel
-				CheckSettings_AnalyzerMini
-				if stat == 0 : vscode_ext_AnalyzerMini = 1
-			}
-		}
+		// settings.jsonの書き換え必要性の確認
+		UpdateIfNeed_vscode_ext_LanguageHsp3
+		UpdateIfNeed_vscode_ext_AnalyzerMini
 		objenable input_HspInstallFolder_objId, (hspPath == "")
 		objprm input_HspInstallFolder_objId, sf
 		gosub *DRAW_INSTALL_LIST
@@ -1381,6 +1421,11 @@ if 0 {
 	SetTooltip objinfo_hwnd(stat), "HSP3をインストールするフォルダを選択\nインストール済みなのに自動取得されなかった場合はHSP3インストールフォルダを選択"
 	objsize 175,18, 18
 	pos 335, ginfo_cy-1
+	chkbox "HSP3.7β版をインストールする", hsp3_opt_37beta
+	hsp3_opt_37beta_hwnd = objinfo_hwnd(stat)
+	objids(length.objids) = stat
+	SetTooltip hsp3_opt_37beta_hwnd, "HSP3.7βの最新版を調査してインストールする。\n（フルセット版アーカイブのため容量が大きくインストール時間も長く掛かります。）"
+
 	tempText = "UTF8文字コードは扱わない"
 	if vscode_master && vscode_settings_autoGuessEncoding : tempText += " (！)"
 	chkbox tempText, vscode_ext_notUseUtf8
@@ -1506,7 +1551,7 @@ aboutUninstall = {"【HSP3】
 ・インストール済みだった場合 sample/basicフォルダ に HelloWorld_HspInVSCode.hsp が作られているので削除してください。
 
 【hspc】
-・HSP3インストールフォルダの hspc.exe, hspc334.exe を削除してください。
+・HSP3インストールフォルダの hspc.exe を削除してください。
 
 【VSCode】
 ・VSCodeのインストーラーを使用しています。（サイレントインストール）
@@ -1559,6 +1604,47 @@ if 0 {
 	if vscode_opt_insertSpaces_hwnd == lparam : vscode_opt_insertSpaces = 1-vscode_opt_insertSpaces : gosub *DRAW_INSTALL_LIST
 	if vscode_opt_trust_hwnd == lparam : vscode_opt_trust = 1-vscode_opt_trust : gosub *DRAW_INSTALL_LIST
 	if vscode_ext_notUseUtf8_hwnd == lparam : vscode_ext_notUseUtf8 = 1-vscode_ext_notUseUtf8 : gosub *DRAW_INSTALL_LIST
+	if hsp3_opt_37beta_hwnd == lparam {
+		hsp3_opt_37beta = 1-hsp3_opt_37beta
+		// hsp37βの情報を取得
+		if hsp3_opt_37beta && checked_hsp3_opt_37beta==0 {
+			checked_hsp3_opt_37beta = 1
+			neturl "https://www.onionsoft.net/hsp/file/"
+			netfileinfo info,"hsp37.zip"
+			if stat : info = "Not Found"
+			if instr(info,0,"Not Found") == -1 {
+				urlZip_Hsp37b = "https://www.onionsoft.net/hsp/file/hsp37.zip"
+				install_HspVer_beta = "3.7"
+			}else {
+				repeat ,7  ; 3.7β6は存在確定。β7から確認する。
+					betaNum = "b"+cnt
+					netfileinfo info,"hsp37"+betaNum+".zip"
+					if stat : break
+					if instr(info,0,"Not Found") != -1 : break
+					urlZip_Hsp37b = "https://www.onionsoft.net/hsp/file/hsp37"+betaNum+".zip"
+					install_HspVer_beta = "3.7 β"+cnt
+				loop
+			}
+		}
+		if hsp3_opt_37beta {
+			dirCur = dir_cur
+			chdir "C:\\"
+			dirlist dList, "hsp37*", 5
+			chdir dirCur
+			sf = "C:\\"
+			notesel dList
+			repeat notemax
+				noteget temp, cnt
+				exist "C:\\" + temp+"\\hsed3.exe" : if strsize == -1 : continue
+				sf = "C:\\" + temp
+				if temp == "hsp37" : break
+			loop
+			noteunsel
+		}else {
+			sf = hspPath_atLaunch  ; 起動直後に取得したhspPathに戻す
+		}
+		gosub *change_HspVer
+	}
 	return
 *ctlcolorstatic
 	if hStatic_licence = lparam || hStatic_assoc = lparam {
@@ -1616,7 +1702,11 @@ if hspPath == "" {
 	LOG_Add "== HSP3 =="
 	// ダウンロード
 	insSeq = 101 : gosub *DRAW_INSTALL_LIST
-	hspUrl = "https://www.onionsoft.net/hsp/file/hsp36.zip"
+	if hsp3_opt_37beta == 0 {
+		hspUrl = urlZip_Hsp36  ; "https://www.onionsoft.net/hsp/file/hsp36.zip"
+	}else {
+		hspUrl = urlZip_Hsp37b  ; "https://www.onionsoft.net/hsp/file/hsp37b6.zip"
+	}
 	LOG_Add "ダウンロード - " + hspUrl
 	LOG_Temp "HSP3 download - 準備中..."
 	Downloader hspUrl, folderPath_downloads, DownUnzipLabel{ LOG_Temp "HSP3 download - "+refstr : return }
@@ -1668,10 +1758,6 @@ if hspPath != "" && installed_hspc == 0 {
 	exist unzippedPath + "\\hspc.exe"
 	if strsize!=-1 {
 		bcopy unzippedPath + "\\hspc.exe", hspPath + "\\hspc.exe"
-	}
-	exist unzippedPath + "\\hspc334.exe"
-	if strsize!=-1 {
-		bcopy unzippedPath + "\\hspc334.exe", hspPath + "\\hspc334.exe"
 	}
 	LOG_Add "hspc インストール完了"
 	DeleteFile zipFilePath
@@ -1986,18 +2072,14 @@ if codePath != "" {
 			if 0 {
 			#deffunc CheckSettings_LanguageHsp3
 			replaced = 0
-			dblBackSlash_path = hspPath+"\\hspc334.exe"
+			dblBackSlash_path = hspPath+"\\hspc.exe"
 			strrep dblBackSlash_path, "\\", "\\\\"
 			SettingsJson_Add noteText, "language-hsp3.compiler", "\""+dblBackSlash_path+"\"" : replaced |= stat
 			dblBackSlash_path = hspPath+"\\hsphelp\\helpman.exe"
 			strrep dblBackSlash_path, "\\", "\\\\"
 			SettingsJson_Add noteText, "language-hsp3.helpman.path.local", "\""+dblBackSlash_path+"\"" : replaced |= stat
 			// runCommands : w指定でデバッグウィンドウが出る。wの付け外しがしやすいように追加しておく。
-			SettingsJson_Add noteText, "language-hsp3.runCommands", "[\n        \"-dwCra\",\n        \"%FILEPATH%\"\n    ]" : replaced |= stat
-			;dblBackSlash_path = hspPath
-			;strrep dblBackSlash_path, "\\", "\\\\"
-			// makeCommands : hspc ver3.4.2 は--hsp3root指定しないとランタイムフォルダが上手く指定されないバグ(?)がある > #No file [C:\hsprt].  // hsp334では(hspc342も)hsp3rootあると実行ファイルが作られない(packfileまで)
-			;SettingsJson_Add noteText, "language-hsp3.makeCommands", "[\n        \"-PmCa --hsp3root \\\""+dblBackSlash_path+"\\\"\",\n        \"%FILEPATH%\"\n    ]" : replaced |= stat
+			SettingsJson_Add noteText, "language-hsp3.runCommands", "[\n        \"-dCraw\",\n        \"%FILEPATH%\"\n    ]" : replaced |= stat
 			return replaced
 			}
 			if stat : notesave settingsJsonPath
@@ -2032,9 +2114,25 @@ if codePath != "" {
 		}
 		vscode_ext_AnalyzerMini = 1
 	}
+	// HSP3 Debugウィンドウ表示設定拡張
+	insSeq = 309 : gosub *DRAW_INSTALL_LIST
+	if vscode_ext_hsp3debugwin != 1 {
+		LOG_Add "VSCode - HSP3 Debugウィンドウ表示設定拡張機能インストール"
+		bcopy "eh3dw001.vsix", localExtHSP3DebugWinPath
+		pipe_buf = "" : pipe_ln = ""
+		dirCur = dir_cur
+		chdir getpath(codePath,32)  ; cmdの中で2個ダブルクオート囲いを防ぐため。上手く記述すりゃ良いはずだけど出来なかった。。。
+		cmd = "cmd /c .\\code --install-extension \""+localExtHSP3DebugWinPath+"\""
+		pipeexec pipe_buf, cmd, 0
+		do : wait 10 : pipeget pipe_ln : until stat==0
+		chdir dirCur
+		exist localExtHSP3DebugWinPath
+		if strsize != -1 : delete localExtHSP3DebugWinPath
+		vscode_ext_hsp3debugwin = 1
+	}
 
 	// キーボードショートカット登録
-	insSeq = 309 : gosub *DRAW_INSTALL_LIST
+	insSeq = 310 : gosub *DRAW_INSTALL_LIST
 	if vscode_settings_shortcutkey != 1 {
 		LOG_Add "VSCode - キーボードショートカット登録"
 		exist keybindingsJsonPath
@@ -2056,7 +2154,7 @@ if codePath != "" {
 		vscode_settings_shortcutkey = 1
 	}
 	// アイコンテーマの登録
-	insSeq = 310 : gosub *DRAW_INSTALL_LIST
+	insSeq = 311 : gosub *DRAW_INSTALL_LIST
 	if vscode_settings_expIcon != 1 {
 		LOG_Add "VSCode - アイコンテーマ設定"
 		vscode_themeSetiPath = codePath
